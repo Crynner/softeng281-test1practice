@@ -30,3 +30,17 @@ public class SpaceFleet {
     public void printFleetSummary() {
     }
 }
+
+class Spaceship {
+    public Spaceship(String name, String status) {
+
+    }
+
+    public String getName() {
+        return "";
+    }
+
+    public String getStatus() {
+        return "";
+    }
+}
