@@ -1,36 +1,39 @@
 package com.crynner;
 
 public class BankAccount {
-    // Add necessary fields here
     static int totalAccounts = 0;
-
-    public BankAccount() {
-        // Constructor implementation
-    }
+    double balance;
 
     public BankAccount(double balance) {
-        // Constructor implementation
+        this.balance = balance;
+        totalAccounts++;
     }
 
     public void deposit(double amount) {
-        // Implement this method
+        if (amount > 0) {
+            balance += amount;
+        }
     }
 
     public void withdraw(double amount) {
-        // Implement this method
+        if (balance > amount) {
+            balance -= amount;
+        }
     }
 
     public void transferTo(BankAccount other, double amount) {
-        // Implement this method
+        if (balance > amount) {
+            withdraw(amount);
+            other.deposit(amount);
+        }
     }
 
     public double getBalance(){
-        return 0.0;
+        return balance;
     }
 
     public static int getTotalAccounts() {
-        // Implement this method
-        return 0;
+        return totalAccounts;
     }
 
     // DO NOT EDIT
