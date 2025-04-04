@@ -91,7 +91,9 @@ Complete the `CriminalInvestigation` class as follows:
      Updates the status of an existing case identified by `caseId`. If the case does not exist, it should print "Case not found".
    
    - **getCaseDetails(String caseId)**:  
-     Returns the details of a case, including the victim name, suspect name, status, and crime type. If the case does not exist, it should return "Case not found".
+     Returns the details of a case, including the victim name, suspect name, status, and crime type. If the case does not exist, it should return "Case not found". Below is the formatting style that is used:
+
+     `Case ID: {id}, Victim: {victim}, Suspect: {suspect}, Status: {status}, Crime Type: {type}`
    
    - **getTotalCases()**:  
      Returns the total number of cases in the system (using the `totalCases` static variable).
