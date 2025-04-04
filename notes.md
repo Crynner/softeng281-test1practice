@@ -157,7 +157,7 @@ The `SpaceFleet` class manages a list of spaceships in a fleet, each with a name
 
 ## 6. Bank Account
 Complete the `BankAccount` class as follows:
-- Each `BankAccount` has a balance and an account number.
+- Each `BankAccount` has a balance.
 - The `deposit(double amount)` method adds funds (ignore negative values).
 - The `withdraw(double amount)` method subtracts funds if sufficient.
 - The `transferTo(BankAccount other, double amount)` method transfers money if sufficient funds exist.
