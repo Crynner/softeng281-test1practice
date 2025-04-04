@@ -8,6 +8,10 @@ public class BankAccount {
         // Constructor implementation
     }
 
+    public BankAccount(double balance) {
+        // Constructor implementation
+    }
+
     public void deposit(double amount) {
         // Implement this method
     }
@@ -18,6 +22,10 @@ public class BankAccount {
 
     public void transferTo(BankAccount other, double amount) {
         // Implement this method
+    }
+
+    public double getBalance(){
+        return 0.0;
     }
 
     public static int getTotalAccounts() {

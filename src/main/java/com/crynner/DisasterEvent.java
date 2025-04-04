@@ -16,6 +16,26 @@ public class DisasterEvent {
         return "";
     }
 
+    public String getId() {
+        return "";
+    }
+
+    public String getName() {
+        return "";
+    }
+
+    public String getLocation() {
+        return "";
+    }
+
+    public String getImpactLevel() {
+        return "";
+    }
+
+    public double getDamageCost() {
+        return 0.0;
+    }
+
     public void updateDamageCost(double newDamageCost) {
     }
 }

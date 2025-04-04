@@ -1,4 +1,4 @@
-## Steel Fabrication Manager Class
+## 1. Steel Fabrication Manager Class
 
 ### Task:
 
@@ -26,7 +26,7 @@ Complete the `SteelFabricationManager` class as follows:
      Returns the total number of projects in the list.
 
 ---
-## Natural Disaster Management System
+## 2. Natural Disaster Management System
 
 ### Task:
 
@@ -58,7 +58,7 @@ Complete the `DisasterEvent` class as follows:
      Updates the damage cost of the disaster event to the new value passed as a parameter.
 
 ---
-## Criminal Investigation System
+## 3. Criminal Investigation System
 
 ### Task:
 
@@ -97,3 +97,67 @@ Complete the `CriminalInvestigation` class as follows:
 5. **Additional Requirements**:
    - Ensure that the `totalCases` variable is updated properly whenever a new case is added.
    - Handle cases where an invalid `caseId` is provided for updates or retrieval.
+
+---
+
+## 4. RPG Character System
+Complete the following `Character` abstract class and its subclasses `Warrior` and `Mage` as follows:  
+
+### **Character (Abstract Class)**  
+- Represents a general RPG character.  
+- Attributes:  
+  - `name` (String): The character's name.  
+  - `level` (int): The character's level.  
+- Methods:  
+  - `getDetails()`: Returns a string in the format **"Name: {name}, Level: {level}"**.  
+  - **Abstract Method** `attack()`: Returns a string describing the character’s attack.  
+
+### **Warrior (Subclass of Character)**  
+- Specializes in melee combat.  
+- Attributes:  
+  - `weaponType` (String): The type of weapon the warrior uses (e.g., "Sword", "Axe").  
+- Overrides:  
+  - `attack()`: Returns a message like **"{name} swings his {weaponType}!"**.  
+
+### **Mage (Subclass of Character)**  
+- Specializes in magical combat.  
+- Attributes:  
+  - `element` (String): The type of magic the mage uses (e.g., "Fire", "Ice").  
+- Overrides:  
+  - `attack()`: Returns a message like **"{name} casts a {element} spell!"**.  
+
+## **Requirements**  
+- Implement the `Character` abstract class and ensure that `Warrior` and `Mage` correctly inherit from it.  
+- Override the `attack()` method in each subclass to provide specific behavior.  
+- Ensure `getDetails()` works correctly for all classes. 
+
+---
+
+## 5. Space Mission Fleet
+
+## Task Overview:
+Complete the `SpaceFleet` class as follows:
+
+The `SpaceFleet` class manages a list of spaceships in a fleet, each with a name and a mission status.
+
+### The class includes the following methods:
+
+- **`addSpaceship(String name)`**: Adds a spaceship to the fleet.
+- **`updateMissionStatus(String name, String status)`**: Updates the mission status of a spaceship.
+- **`getMissionStatus(String name)`**: Returns the mission status of a spaceship.
+- **`listSpaceships()`**: Returns an `ArrayList<String>` of the names of all spaceships in the fleet.
+- **`getSpaceshipsByStatus(String status)`**: Returns an `ArrayList<String>` of the names of spaceships with a specific mission status.
+- **`removeSpaceship(String name)`**: Removes a spaceship from the fleet by its name.
+- **`printFleetSummary()`**: Prints a formatted summary of all spaceships and their mission statuses. Each spaceship’s information should be printed on a new line in the following format:
+  - `"Spaceship [name] - Status: [status]"`
+
+---
+
+## 6. Bank Account
+Complete the `BankAccount` class as follows:
+- Each `BankAccount` has a balance and an account number.
+- The `deposit(double amount)` method adds funds (ignore negative values).
+- The `withdraw(double amount)` method subtracts funds if sufficient.
+- The `transferTo(BankAccount other, double amount)` method transfers money if sufficient funds exist.
+- Use a **static variable** to track the number of accounts created.
+- The `getTotalAccounts()` static method returns the number of total accounts.
