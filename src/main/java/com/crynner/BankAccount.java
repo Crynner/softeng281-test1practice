@@ -2,6 +2,7 @@ package com.crynner;
 
 public class BankAccount {
     // Add necessary fields here
+    static int totalAccounts = 0;
 
     public BankAccount() {
         // Constructor implementation
@@ -22,6 +23,11 @@ public class BankAccount {
     public static int getTotalAccounts() {
         // Implement this method
         return 0;
+    }
+
+    // DO NOT EDIT
+    public static void resetTotalAccounts() {
+        totalAccounts = 0;
     }
 }
 
