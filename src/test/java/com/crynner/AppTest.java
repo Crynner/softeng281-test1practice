@@ -110,6 +110,7 @@ public class AppTest
 
         @BeforeEach
         void setUp() {
+            BankAccount.resetTotalAccounts();
             account1 = new BankAccount(1000.0); // Initial balance for account1
             account2 = new BankAccount(500.0);  // Initial balance for account2
         }
