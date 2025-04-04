@@ -52,7 +52,9 @@ Complete the `DisasterEvent` class as follows:
 
 3. **Methods**:
    - `getDisasterDetails()`:  
-     Returns a string containing the disaster's details, including ID, name, location, impact level, and damage cost.
+     Returns a string containing the disaster's details, including ID, name, location, impact level, and damage cost. Shown below is the format to use:
+
+     `ID: {id}, Name: {name}, Location: {location}, Impact Level: {impactLevel}, Damage Cost: {damageCost (1dp)}`
    
    - `updateDamageCost(double newDamageCost)`:  
      Updates the damage cost of the disaster event to the new value passed as a parameter.
