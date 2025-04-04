@@ -537,9 +537,4 @@ public class AppTest
             assertEquals(2, CriminalInvestigation.getTotalCases());
         }
     }
-    @Test
-    public void shouldAnswerWithTrue()
-    {
-        assertTrue( true );
-    }
 }
