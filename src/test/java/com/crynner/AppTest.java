@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -535,6 +536,160 @@ public class AppTest
             investigation.updateCaseStatus("C001", "Closed");
 
             assertEquals(2, CriminalInvestigation.getTotalCases());
+        }
+    }
+
+    @TestMethodOrder(MethodOrderer.MethodName.class)
+    public static class LibrarySystemTest {
+
+        private Library library;
+        private Book book1;
+        private Book book2;
+        private User user1;
+        private User user2;
+        private User user3;
+
+        @BeforeEach
+        public void setUp() {
+            library = new Library();
+            book1 = new Book("Java Programming");
+            book2 = new Book("Algorithms 101");
+            user1 = new User("Alice");
+            user2 = new User("Bob");
+            user3 = new User("Charlie");
+            library.addBook(book1, 3); // Add 3 copies of "Java Programming"
+            library.addBook(book2, 2); // Add 2 copies of "Algorithms 101"
+        }
+
+        @Test
+        public void testBorrowBookWhenAvailable() {
+            // User1 borrows a book
+            library.borrowBook(user1, book1);
+            assertEquals(2, library.getAvailableCopies(book1)); // 2 copies should be available
+            assertTrue(user1.borrowedBooks().contains(book1)); // User1 should have borrowed the book
+        }
+
+        @Test
+        public void testBorrowBookWhenNoCopiesAvailable() {
+            // User1 borrows all copies of the book
+            library.borrowBook(user1, book1);
+            library.borrowBook(user2, book1);
+            library.borrowBook(user3, book1);
+
+            // There are no more available copies
+            assertEquals(0, library.getAvailableCopies(book1));
+
+            // Now, if a fourth user tries to borrow the book, it should fail
+            User user4 = new User("Dave");
+            library.borrowBook(user4, book1);
+            assertEquals(0, library.getAvailableCopies(book1)); // Still 0 available copies
+            assertFalse(user4.borrowedBooks().contains(book1)); // User4 shouldn't have borrowed the book
+        }
+
+        @Test
+        public void testReturnBook() {
+            // User1 borrows and then returns a book
+            library.borrowBook(user1, book1);
+            assertEquals(2, library.getAvailableCopies(book1)); // 2 copies should be available
+
+            library.returnBook(user1, book1);
+            assertEquals(3, library.getAvailableCopies(book1)); // 3 copies should be available now
+            assertFalse(user1.borrowedBooks().contains(book1)); // User1 should not have the book anymore
+        }
+
+        @Test
+        public void testGetPossessors() {
+            // User1 and User2 borrow a copy of the book
+            library.borrowBook(user1, book1);
+            library.borrowBook(user2, book1);
+
+            List<User> possessors = library.getPossessors(book1);
+            assertEquals(2, possessors.size());
+            assertTrue(possessors.contains(user1));
+            assertTrue(possessors.contains(user2));
+        }
+
+        @Test
+        public void testUserToStringNoBooks() {
+            // Test the toString method when the user has no books borrowed
+            assertEquals("Alice: No books borrowed", user1.toString());
+        }
+
+        @Test
+        public void testUserToStringWithBooks() {
+            // User1 borrows a book and we check toString
+            library.borrowBook(user1, book1);
+            assertEquals("Alice: Java Programming", user1.toString());
+        }
+
+        @Test
+        public void testMultipleUsersBorrowSameBook() {
+            // User1 and User2 borrow a copy of the same book
+            library.borrowBook(user1, book2);
+            library.borrowBook(user2, book2);
+
+            assertTrue(user1.borrowedBooks().contains(book2));
+            assertTrue(user2.borrowedBooks().contains(book2));
+            assertEquals(0, library.getAvailableCopies(book2)); // No copies left
+        }
+
+        @Test
+        public void testReturnBookAndBorrowAgain() {
+            // User1 borrows a book, then returns it, and borrows it again
+            library.borrowBook(user1, book1);
+            library.returnBook(user1, book1);
+            library.borrowBook(user1, book1); // Borrow again
+
+            assertTrue(user1.borrowedBooks().contains(book1)); // User1 should have the book again
+            assertEquals(2, library.getAvailableCopies(book1)); // 2 copies should be available
+        }
+
+        @Test
+        public void testBorrowBookWhenLibraryEmpty() {
+            // Try to borrow a book when no copies are available
+            library.borrowBook(user1, book1);
+            library.borrowBook(user2, book1);
+            library.borrowBook(user3, book1); // All copies are borrowed
+
+            // There should be no more available copies
+            assertEquals(0, library.getAvailableCopies(book1));
+
+            User user4 = new User("Dave");
+            library.borrowBook(user4, book1); // User4 tries to borrow, should fail
+            assertFalse(user4.borrowedBooks().contains(book1)); // User4 should not have the book
+        }
+
+        @Test
+        public void testComprehensiveTest() {
+            // Borrowing, returning, multiple users, and possession tracking
+            library.borrowBook(user1, book1);
+            library.borrowBook(user2, book2);
+            library.borrowBook(user3, book1);
+
+            // Assert borrowed books for each user
+            assertTrue(user1.borrowedBooks().contains(book1));
+            assertTrue(user2.borrowedBooks().contains(book2));
+            assertTrue(user3.borrowedBooks().contains(book1));
+
+            // Assert the library’s available copies
+            assertEquals(1, library.getAvailableCopies(book1)); // 1 copy of book1 left
+            assertEquals(1, library.getAvailableCopies(book2)); // 1 copy of book2 left
+
+            // Return a book and check the system again
+            library.returnBook(user1, book1);
+            assertEquals(2, library.getAvailableCopies(book1)); // 2 copies should be available now
+            assertFalse(user1.borrowedBooks().contains(book1)); // User1 should not have book1 anymore
+
+            // User1 borrows again
+            library.borrowBook(user1, book1);
+            assertTrue(user1.borrowedBooks().contains(book1)); // User1 should now have book1
+            assertEquals(1, library.getAvailableCopies(book1)); // Only 1 copy left in the library
+
+            // Get and assert all possessors of book1
+            List<User> possessors = library.getPossessors(book1);
+            assertEquals(2, possessors.size());
+            assertTrue(possessors.contains(user1));
+            assertTrue(possessors.contains(user3));
         }
     }
 }
