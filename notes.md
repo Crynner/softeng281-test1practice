@@ -165,3 +165,28 @@ Complete the `BankAccount` class as follows:
 - The `transferTo(BankAccount other, double amount)` method transfers money if sufficient funds exist.
 - Use a **static variable** to track the number of accounts created.
 - The `getTotalAccounts()` static method returns the number of total accounts.
+
+---
+
+## 7. Library System with Borrowing, Multiple Copies, and Tracking Possession
+
+### Question:
+Create a `Library` class and a `User` class for a library system. The library can own multiple copies of the same book, and multiple users can borrow a copy of the book if one is available. Additionally, you should be able to find out who is in possession of each copy of a given book. Implement the following:
+
+- **`Library` class**:
+  - `addBook(Book book, int copies)`: Adds a specific number of copies of a book to the library.
+  - `borrowBook(User user, Book book)`: Allows a user to borrow a book. A user can only borrow a copy if there are available copies in the library.
+  - `returnBook(User user, Book book)`: Allows a user to return a borrowed copy of a book. When a book is returned, it becomes available for other users to borrow.
+  - `getAvailableCopies(Book book)`: Returns the number of available copies of a book in the library.
+  - `getPossessors(Book book)`: Returns a list of `User` objects who currently have a copy of the specified book.
+
+- **`User` class**:
+  - `User(String name)`: Initializes a user with a given name.
+  - `borrowedBooks()`: Returns a list of books currently borrowed by the user.
+  - `borrowBook(Book book)`: Adds a borrowed book to the user’s list of borrowed books.
+  - `returnBook(Book book)`: Removes a book from the user’s borrowed books list.
+  - `toString()`: Returns a string representation of the user’s name followed by the list of books they are currently in possession of.
+
+- **`Book` class**:
+  - `Book(String title)`: Initializes a book with a title.
+  - `getTitle()`: Returns the title of the book.
