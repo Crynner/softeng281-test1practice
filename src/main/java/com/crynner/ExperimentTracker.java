@@ -34,7 +34,9 @@ class ExperimentTracker {
     public int countSuccessful() {
         int count = 0;
         for (Experiment exp : experiments) {
-            if (exp.wasSuccessful()) count++;
+            if (exp.wasSuccessful()) {
+                count++;
+            }
         }
         return count;
     }

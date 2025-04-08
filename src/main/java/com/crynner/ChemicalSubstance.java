@@ -3,8 +3,8 @@ package com.crynner;
 import java.util.ArrayList;
 
 abstract class ChemicalSubstance {
-    private String name;
-    private String symbol;
+    protected String name;
+    protected String symbol;
 
     public ChemicalSubstance(String name, String symbol) {
         this.name = name;
@@ -37,16 +37,19 @@ class Element extends ChemicalSubstance {
     }
 
     public int getAtomicNumber() {
-        return 0;
+        return atomicNumber;
     }
 
     @Override
     public String describe() {
-        return null;
+        return String.format("%s [%s] - Atomic Number: %d", name, symbol, atomicNumber);
     }
 
     @Override
     public boolean reactsWith(ChemicalSubstance other) {
+        if (other.getClass() == Compound.class) {
+            return other.reactsWith(this);
+        }
         return false;
     }
 }
@@ -65,11 +68,18 @@ class Compound extends ChemicalSubstance {
 
     @Override
     public String describe() {
-        return null;
+        String joinedStr = "";
+        for (Element element : components) {
+            if (!joinedStr.equals("")) {
+                joinedStr += ", ";
+            }
+            joinedStr += element.getSymbol();
+        }
+        return String.format("%s [%s] - Composed of: %s", name, symbol, joinedStr);
     }
 
     @Override
     public boolean reactsWith(ChemicalSubstance other) {
-        return false;
+        return other != null && Element.class == other.getClass() && components.contains(other);
     }
 }

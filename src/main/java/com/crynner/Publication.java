@@ -1,10 +1,16 @@
 package com.crynner;
 
 abstract class Publication {
-    // TODO: fields, constructor
+    protected String name;
+    protected int yearPublished;
+
+    public Publication(String name, int year) {
+        this.name = name;
+        this.yearPublished = year;
+    }
 
     public String getSummary() {
-        return null; // return "<title> - <year>"
+        return String.format("%s - %d", name, yearPublished); // return "<title> - <year>"
     }
 
     public abstract int getLength();
@@ -13,48 +19,62 @@ abstract class Publication {
 }
 
 class Book extends Publication {
-    // TODO: fields
+    private String author;
+    private int pageNumber;
 
     public Book(String name, int yearPublished, String author, int pageNumber){
+        super(name, yearPublished);
+        this.author = author;
+        this.pageNumber = pageNumber;
     }
 
     public Book(String name, String author){
+        super(name, 2024);
+        this.author = author;
+        pageNumber = 100;
     }
 
     @Override
     public int getLength() {
-        return -1;
+        return pageNumber;
     }
 
     @Override
     public void updateInfo() {
-        // increase page count
+        pageNumber += 10;
     }
 
     @Override
     public String toString() {
-        return "";
+        return String.format("%s by %s (%d pages)", name, author, pageNumber);
     }
 }
 
 class Magazine extends Publication {
-    // TODO: fields
+    private int issueNum;
+    private boolean monthly;
 
     public Magazine(String name, int yearPublished, int issueNumber, boolean monthly){
+        super(name, yearPublished);
+        issueNum = issueNumber;
+        this.monthly = monthly;
     }
 
     @Override
     public int getLength() {
-        return -1;
+        return issueNum;
     }
 
     @Override
     public void updateInfo() {
-        // increase issue number, maybe year
+        issueNum += 1;
+        if (monthly) {
+            yearPublished += 1;
+        }
     }
 
     @Override
     public String toString() {
-        return "";
+        return String.format("%s - Issue %d (%d)", name, issueNum, yearPublished);
     }
 }

@@ -1210,6 +1210,7 @@ public class AppTest
             // Test that experiments are correctly added to the tracker
             tracker.addExperiment(exp1);
             tracker.addExperiment(exp2);
+            tracker.addExperiment(exp3);
             assertEquals(2, tracker.countSuccessful());
         }
     

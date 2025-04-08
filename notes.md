@@ -439,7 +439,7 @@ Complete the TeamMember class as follows:
 - **TeamMember(String name, String role):** Initializes a team member with a given name and role.
 - **getName():** Returns the name of the team member.
 - **getRole():** Returns the role of the team member.
-- **toString():** Returns a string representation of the team member in the format: `"name the role"`.
+- **toString():** Returns a string representation of the team member in the format: `"<name> the <role>"`.
 
 ### Requirements for the TeamManager class
 Complete the TeamManager class as follows:
