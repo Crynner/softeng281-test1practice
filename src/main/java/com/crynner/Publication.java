@@ -13,7 +13,13 @@ abstract class Publication {
 }
 
 class Book extends Publication {
-    // TODO: fields, constructors
+    // TODO: fields
+
+    public Book(String name, int yearPublished, String author, int pageNumber){
+    }
+
+    public Book(String name, String author){
+    }
 
     @Override
     public int getLength() {
@@ -32,7 +38,10 @@ class Book extends Publication {
 }
 
 class Magazine extends Publication {
-    // TODO: fields, constructor
+    // TODO: fields
+
+    public Magazine(String name, int yearPublished, int issueNumber, boolean monthly){
+    }
 
     @Override
     public int getLength() {
