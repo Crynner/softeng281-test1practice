@@ -15,8 +15,8 @@ Within the repo are test questions similar to CodeRunner exercises and the Pract
 11. Pet Hotel (Medium) [`PetHotel.java`] - ArrayLists, Object-Object Interaction
 12. Experiment Tracker (Easy) [`ExperimentTracker.java`] - ArrayLists
 13. Team Manager (Easy) [`TeamManager.java`] - ArrayLists
-14. Phoneme Analyser (Hard) [`Phoneme.java`] - TBC
-15. DNA Lab System (Hard) [`DnaLab.java`] - TBC
+14. Phoneme Analyser (Hard) [`Phoneme.java`] - Primitive Types, ArrayLists
+15. DNA Lab System (Hard) [`DnaLab.java`] - Object-Object Interaction, ArrayLists, String Manipulation
 
 ## Notes
 - Each "Question" is separated into its own file - 1 file = 1 question.
