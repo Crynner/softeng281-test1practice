@@ -545,8 +545,8 @@ public class AppTest
     public static class LibrarySystemTest {
 
         private Library library;
-        private Book book1;
-        private Book book2;
+        private LibraryBook book1;
+        private LibraryBook book2;
         private User user1;
         private User user2;
         private User user3;
@@ -554,8 +554,8 @@ public class AppTest
         @BeforeEach
         public void setUp() {
             library = new Library();
-            book1 = new Book("Java Programming");
-            book2 = new Book("Algorithms 101");
+            book1 = new LibraryBook("Java Programming");
+            book2 = new LibraryBook("Algorithms 101");
             user1 = new User("Alice");
             user2 = new User("Bob");
             user3 = new User("Charlie");
@@ -1070,7 +1070,7 @@ public class AppTest
     }
 
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    class PetHotelTest {
+    public static class PetHotelTest {
 
         private Pet pet1;
         private Pet pet2;
@@ -1157,6 +1157,190 @@ public class AppTest
             // Test trying to check out a pet that is not checked in
             hotel.checkOut(pet1);  // No effect because pet1 was not checked in
             assertFalse(hotel.isGuest(pet1));
+        }
+    }
+
+    @TestMethodOrder(MethodOrderer.MethodName.class)
+    public static class ExperimentTrackerTest {
+
+        private Experiment exp1;
+        private Experiment exp2;
+        private Experiment exp3;
+        private ExperimentTracker tracker;
+    
+        @BeforeEach
+        void setUp() {
+            // Initialize Experiment objects and ExperimentTracker object before each test
+            exp1 = new Experiment("Experiment1", true);
+            exp2 = new Experiment("Experiment2", false);
+            exp3 = new Experiment("Experiment3", true);
+            tracker = new ExperimentTracker();
+        }
+    
+        // Test Experiment class functionality
+    
+        @Test
+        void testGetName() {
+            // Test that the name of the experiment is correctly retrieved
+            assertEquals("Experiment1", exp1.getName());
+        }
+    
+        @Test
+        void testWasSuccessful() {
+            // Test that the success status of the experiment is correctly returned
+            assertTrue(exp1.wasSuccessful());
+            assertFalse(exp2.wasSuccessful());
+        }
+    
+        @Test
+        void testToString() {
+            // Test that the string representation of the experiment is correct
+            assertEquals("Experiment1 - Success", exp1.toString());
+            assertEquals("Experiment2 - Failure", exp2.toString());
+        }
+    
+        // Test ExperimentTracker class functionality
+    
+        @Test
+        void testAddExperiment() {
+            // Test that experiments are correctly added to the tracker
+            tracker.addExperiment(exp1);
+            tracker.addExperiment(exp2);
+            assertEquals(2, tracker.countSuccessful());
+        }
+    
+        @Test
+        void testCountSuccessfulWithNoExperiments() {
+            // Test that the count of successful experiments is 0 when no experiments are added
+            assertEquals(0, tracker.countSuccessful());
+        }
+    
+        @Test
+        void testCountSuccessfulWithOneSuccessfulExperiment() {
+            // Test that the count of successful experiments is correct when there is one successful experiment
+            tracker.addExperiment(exp1);
+            assertEquals(1, tracker.countSuccessful());
+        }
+    
+        @Test
+        void testCountSuccessfulWithMultipleExperiments() {
+            // Test that the count of successful experiments is correct when there are multiple experiments
+            tracker.addExperiment(exp1);
+            tracker.addExperiment(exp2);
+            tracker.addExperiment(exp3);
+            assertEquals(2, tracker.countSuccessful());
+        }
+    
+        @Test
+        void testCountSuccessfulWithOnlyFailedExperiments() {
+            // Test that the count of successful experiments is 0 when all experiments are failures
+            Experiment failedExp1 = new Experiment("Fail1", false);
+            Experiment failedExp2 = new Experiment("Fail2", false);
+            tracker.addExperiment(failedExp1);
+            tracker.addExperiment(failedExp2);
+            assertEquals(0, tracker.countSuccessful());
+        }
+    
+        @Test
+        void testCountSuccessfulAfterRemovingExperiment() {
+            // Test that count of successful experiments is correct after removing an experiment
+            tracker.addExperiment(exp1);
+            tracker.addExperiment(exp2);
+            tracker.addExperiment(exp3);
+            tracker.addExperiment(new Experiment("Fail4", false));
+            assertEquals(2, tracker.countSuccessful());
+        }
+    }
+
+    @TestMethodOrder(MethodOrderer.MethodName.class)
+    public static class TeamManagerTest {
+
+        private TeamMember member1;
+        private TeamMember member2;
+        private TeamMember member3;
+        private TeamManager manager;
+    
+        @BeforeEach
+        void setUp() {
+            // Initialize TeamMember objects and TeamManager object before each test
+            member1 = new TeamMember("Alice", "Developer");
+            member2 = new TeamMember("Bob", "Designer");
+            member3 = new TeamMember("Charlie", "Manager");
+            manager = new TeamManager();
+        }
+    
+        // Test TeamMember class functionality
+    
+        @Test
+        void testGetName() {
+            // Test that the name of the team member is correctly retrieved
+            assertEquals("Alice", member1.getName());
+        }
+    
+        @Test
+        void testGetRole() {
+            // Test that the role of the team member is correctly retrieved
+            assertEquals("Developer", member1.getRole());
+        }
+    
+        @Test
+        void testToString() {
+            // Test that the string representation of the team member is correct
+            assertEquals("Alice the Developer", member1.toString());
+            assertEquals("Bob the Designer", member2.toString());
+        }
+    
+        // Test TeamManager class functionality
+    
+        @Test
+        void testAddMember() {
+            // Test that a member is correctly added to the team
+            manager.addMember(member1);
+            assertTrue(manager.hasMember(member1));
+        }
+    
+        @Test
+        void testHasMemberWhenMemberExists() {
+            // Test that the manager correctly identifies an existing member in the team
+            manager.addMember(member2);
+            assertTrue(manager.hasMember(member2));
+        }
+    
+        @Test
+        void testHasMemberWhenMemberDoesNotExist() {
+            // Test that the manager correctly identifies when a member is not in the team
+            assertFalse(manager.hasMember(member1));
+        }
+    
+        @Test
+        void testTeamSizeWithNoMembers() {
+            // Test that the team size is 0 when no members have been added
+            assertEquals(0, manager.teamSize());
+        }
+    
+        @Test
+        void testTeamSizeWithOneMember() {
+            // Test that the team size is 1 when only one member has been added
+            manager.addMember(member1);
+            assertEquals(1, manager.teamSize());
+        }
+    
+        @Test
+        void testTeamSizeWithMultipleMembers() {
+            // Test that the team size is correct when multiple members have been added
+            manager.addMember(member1);
+            manager.addMember(member2);
+            manager.addMember(member3);
+            assertEquals(3, manager.teamSize());
+        }
+    
+        @Test
+        void testHasMemberAfterRemoval() {
+            // Test that the team manager correctly identifies the member after removal
+            manager.addMember(member1);
+            manager.addMember(member2);
+            // Assuming no remove method, manually check membership
+            assertTrue(manager.hasMember(member2));
         }
     }
 

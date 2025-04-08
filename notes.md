@@ -410,3 +410,40 @@ Complete the PetHotel class as follows:
 - **checkOut(Pet pet):** Removes a pet from the hotel.
 - **isCheckedIn(Pet pet):** Returns true if the pet is currently checked in, otherwise false.
 - **listCheckedInPets():** Returns a list of names of all checked-in pets (as a single string with names separated by commas in order of check-in).
+
+---
+
+## 12. Experiment & ExperimentTracker
+
+### Requirements for the Experiment class
+Complete the Experiment class as follows:
+
+- **Experiment(String name, boolean success):** Initializes an experiment with a given name and success status.
+- **getName():** Returns the name of the experiment.
+- **wasSuccessful():** Returns a boolean indicating if the experiment was successful.
+- **toString():** Returns a string representation of the experiment in the format: `"name - Success"` or `"name - Failure"`, depending on the success of the experiment.
+
+### Requirements for the ExperimentTracker class
+Complete the ExperimentTracker class as follows:
+
+- **addExperiment(Experiment exp):** Adds an experiment to the tracker.
+- **countSuccessful():** Returns the number of successful experiments that have been added to the tracker.
+
+---
+
+## 13. TeamMember & TeamManager
+
+### Requirements for the TeamMember class
+Complete the TeamMember class as follows:
+
+- **TeamMember(String name, String role):** Initializes a team member with a given name and role.
+- **getName():** Returns the name of the team member.
+- **getRole():** Returns the role of the team member.
+- **toString():** Returns a string representation of the team member in the format: `"name the role"`.
+
+### Requirements for the TeamManager class
+Complete the TeamManager class as follows:
+
+- **addMember(TeamMember member):** Adds a team member to the team.
+- **hasMember(TeamMember member):** Returns true if the team contains the specified member, otherwise false.
+- **teamSize():** Returns the size of the team (the number of members in the team).

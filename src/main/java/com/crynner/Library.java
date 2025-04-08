@@ -4,28 +4,28 @@ import java.util.List;
 
 public class Library {
     // Method to add a specific number of copies of a book to the library
-    public void addBook(Book book, int copies) {
+    public void addBook(LibraryBook book, int copies) {
         // Implement this method
     }
 
     // Method to allow a user to borrow a book if available
-    public void borrowBook(User user, Book book) {
+    public void borrowBook(User user, LibraryBook book) {
         // Implement this method
     }
 
     // Method to allow a user to return a borrowed copy of a book
-    public void returnBook(User user, Book book) {
+    public void returnBook(User user, LibraryBook book) {
         // Implement this method
     }
 
     // Method to get the number of available copies of the specified book
-    public int getAvailableCopies(Book book) {
+    public int getAvailableCopies(LibraryBook book) {
         // Implement this method
         return 0;
     }
 
     // Method to get a list of users who currently have a copy of the specified book
-    public List<User> getPossessors(Book book) {
+    public List<User> getPossessors(LibraryBook book) {
         // Implement this method
         return null;
     }
@@ -38,18 +38,18 @@ class User {
     }
 
     // Method to return a list of books currently borrowed by the user
-    public List<Book> borrowedBooks() {
+    public List<LibraryBook> borrowedBooks() {
         // Implement this method
         return null;
     }
 
     // Method to add a borrowed book to the user's list of borrowed books
-    public void borrowBook(Book book) {
+    public void borrowBook(LibraryBook book) {
         // Implement this method
     }
 
     // Method to remove a book from the user's borrowed books list
-    public void returnBook(Book book) {
+    public void returnBook(LibraryBook book) {
         // Implement this method
     }
 
@@ -61,9 +61,9 @@ class User {
     }
 }
 
-class Book {
+class LibraryBook {
     // Constructor to initialize a book with a title
-    public Book(String title) {
+    public LibraryBook(String title) {
         // Implement this method
     }
 
