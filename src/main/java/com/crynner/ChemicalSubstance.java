@@ -3,20 +3,16 @@ package com.crynner;
 import java.util.ArrayList;
 
 abstract class ChemicalSubstance {
-    private String name;
-    private String symbol;
 
     public ChemicalSubstance(String name, String symbol) {
-        this.name = name;
-        this.symbol = symbol;
     }
 
     public String getName() {
-        return name;
+        return "";
     }
 
     public String getSymbol() {
-        return symbol;
+        return "";
     }
 
     public abstract String describe();
