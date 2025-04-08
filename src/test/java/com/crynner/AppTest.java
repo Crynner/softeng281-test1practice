@@ -1350,6 +1350,214 @@ public class AppTest
         }
     }
 
+    @Nested
+    @TestMethodOrder(MethodOrderer.MethodName.class)
+    public class VowelDetectorTest {
+
+        @Test
+        public void testPhonemeGetters() {
+            Phoneme p = new Phoneme('a', 300, 0.6, true);
+            assertEquals('a', p.getSymbol());
+            assertEquals(300, p.getDuration());
+            assertEquals(0.6, p.getIntensity());
+            assertTrue(p.isVowel());
+        }
+    
+        @Test
+        public void testIsLongTrue() {
+            Phoneme p = new Phoneme('b', 300, 0.4, false);
+            assertTrue(p.isLong());
+        }
+    
+        @Test
+        public void testIsLongFalse() {
+            Phoneme p = new Phoneme('c', 100, 0.4, false);
+            assertFalse(p.isLong());
+        }
+    
+        @Test
+        public void testAmplifyUnderCap() {
+            Phoneme p = new Phoneme('d', 150, 0.3, false);
+            p.amplify(2.0);
+            assertEquals(0.6, p.getIntensity(), 0.001);
+        }
+    
+        @Test
+        public void testAmplifyCapAtOne() {
+            Phoneme p = new Phoneme('e', 150, 0.8, true);
+            p.amplify(2.0);
+            assertEquals(1.0, p.getIntensity(), 0.001);
+        }
+    
+        @Test
+        public void testAddPhonemesAndVowelCount() {
+            VowelDetector detector = new VowelDetector();
+            detector.addPhoneme(new Phoneme('a', 200, 0.5, true));
+            detector.addPhoneme(new Phoneme('b', 150, 0.3, false));
+            detector.addPhoneme(new Phoneme('e', 250, 0.4, true));
+            assertEquals(2, detector.getVowelCount());
+        }
+    
+        @Test
+        public void testGetAverageIntensity() {
+            VowelDetector detector = new VowelDetector();
+            detector.addPhoneme(new Phoneme('x', 100, 0.2, false));
+            detector.addPhoneme(new Phoneme('y', 200, 0.6, false));
+            assertEquals(0.4, detector.getAverageIntensity(), 0.001);
+        }
+    
+        @Test
+        public void testGetAverageIntensityEmpty() {
+            VowelDetector detector = new VowelDetector();
+            assertEquals(0.0, detector.getAverageIntensity(), 0.001);
+        }
+    
+        @Test
+        public void testGetLongestVowel() {
+            VowelDetector detector = new VowelDetector();
+            detector.addPhoneme(new Phoneme('a', 300, 0.5, true));
+            detector.addPhoneme(new Phoneme('e', 200, 0.4, true));
+            detector.addPhoneme(new Phoneme('s', 250, 0.6, false));
+            assertEquals('a', detector.getLongestVowel());
+        }
+    
+        @Test
+        public void testGetLongestVowelNonePresent() {
+            VowelDetector detector = new VowelDetector();
+            detector.addPhoneme(new Phoneme('s', 300, 0.4, false));
+            assertEquals('-', detector.getLongestVowel());
+        }
+    
+        @Test
+        public void testRemoveShortSounds() {
+            VowelDetector detector = new VowelDetector();
+            detector.addPhoneme(new Phoneme('a', 100, 0.4, true));
+            detector.addPhoneme(new Phoneme('b', 300, 0.6, false));
+            detector.removeShortSounds(200);
+            assertEquals(1, detector.getVowelCount());  // only 'b' remains
+            assertEquals(0.6, detector.getAverageIntensity(), 0.001);
+        }
+    
+        @Test
+        public void testToStringOutput() {
+            VowelDetector detector = new VowelDetector();
+            detector.addPhoneme(new Phoneme('p', 100, 0.3, false));
+            detector.addPhoneme(new Phoneme('a', 200, 0.5, true));
+            String result = detector.toString();
+            assertTrue(result.contains("Symbol: p, Duration: 100ms, Intensity: 0.3"));
+            assertTrue(result.contains("Symbol: a, Duration: 200ms, Intensity: 0.5"));
+        }
+    }
+
+    @Nested
+    @TestMethodOrder(MethodOrderer.MethodName.class)
+    public class DNALabTest {
+
+        @Test
+        void testNucleotideBaseAndComplement() {
+            Nucleotide n = new Nucleotide('C');
+            assertEquals('C', n.getBase());
+            assertEquals("G", n.getComplement());
+        }
+    
+        @Test
+        void testInvalidNucleotideDefaultsToA() {
+            Nucleotide n = new Nucleotide('Z');
+            assertEquals('A', n.getBase());
+            assertEquals("T", n.getComplement());
+        }
+    
+        @Test
+        void testGeneCreationAndGetSequence() {
+            Gene gene = new Gene("ATXGCY");
+            assertEquals("ATGC", gene.getSequence()); // Ignores X and Y
+        }
+    
+        @Test
+        void testComplementarySequence() {
+            Gene gene = new Gene("ATGC");
+            assertEquals("GCAT", gene.getComplementarySequence()); // Reverse of complement
+        }
+    
+        @Test
+        void testContainsPattern() {
+            Gene gene = new Gene("AATTCCGG");
+            assertTrue(gene.containsPattern("TTC"));
+            assertFalse(gene.containsPattern("XYZ"));
+        }
+    
+        @Test
+        void testCountOccurrences() {
+            Gene gene = new Gene("ATATAT");
+            assertEquals(3, gene.countOccurrences("AT"));
+            assertEquals(0, gene.countOccurrences("CG"));
+        }
+    
+        @Test
+        void testOrganismDNAConcatenation() {
+            Organism org = new Organism("ZebraFish");
+            org.addGene(new Gene("ATGC"));
+            org.addGene(new Gene("CGTA"));
+            assertEquals("ATGCCGTA", org.getFullDNA());
+        }
+    
+        @Test
+        void testOrganismMatchingGene() {
+            Organism a = new Organism("A");
+            Organism b = new Organism("B");
+            a.addGene(new Gene("GATTACA"));
+            b.addGene(new Gene("GATTACA"));
+            assertTrue(a.hasMatchingGene(b));
+        }
+    
+        @Test
+        void testOrganismNameAndGeneCount() {
+            Organism org = new Organism("Yeast");
+            assertEquals("Yeast", org.getName());
+            org.addGene(new Gene("A"));
+            org.addGene(new Gene("T"));
+            assertEquals(2, org.getGeneCount());
+        }
+    
+        @Test
+        void testLabRegisterAndPatternSearch() {
+            DnaLab lab = new DnaLab();
+            Organism o1 = new Organism("Ecoli");
+            Organism o2 = new Organism("Salmonella");
+            o1.addGene(new Gene("ACTG"));
+            o2.addGene(new Gene("GGAAG"));
+    
+            lab.registerOrganism(o1);
+            lab.registerOrganism(o2);
+    
+            List<String> result = lab.getOrganismsWithGenePattern("GG");
+            assertTrue(result.contains("Salmonella"));
+            assertFalse(result.contains("Ecoli"));
+        }
+    
+        @Test
+        void testGenerateReport() {
+            DnaLab lab = new DnaLab();
+            Organism o1 = new Organism("Alpha");
+            o1.addGene(new Gene("AAAA"));
+            o1.addGene(new Gene("TTTT"));
+            lab.registerOrganism(o1);
+    
+            String expected = """
+                Organism: Alpha
+                Gene Count: 2
+                """.trim();
+            assertEquals(expected, lab.generateReport().trim());
+        }
+    
+        @Test
+        void testEmptyGeneIgnoredInvalidChars() {
+            Gene gene = new Gene("123XYZ");
+            assertEquals("", gene.getSequence());
+            assertFalse(gene.containsPattern("A"));
+        }
+    }
+
 
 
 }
