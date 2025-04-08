@@ -389,3 +389,24 @@ Complete the `ChemicalSubstance`, `Element`, and `Compound` classes as follows:
 - Object-to-object interaction using polymorphism.
 - ArrayList usage to store compound components.
 - String formatting and dynamic descriptions.
+
+---
+
+## 11. Pet & PetHotel
+
+### Requirements for the Pet class
+Complete the Pet class as follows:
+
+- **Pet(String name):** Initializes a new Pet with a given name.
+- **getName():** Returns the name of the pet.
+- **getOwner():** Returns the name of the pet's owner, or null if not owned.
+- **assignOwner(String ownerName):** Assigns or reassigns the owner of this pet.
+- **removeOwner():** Removes the owner of this pet.
+
+### Requirements for the PetHotel class
+Complete the PetHotel class as follows:
+
+- **checkIn(Pet pet):** Adds a pet to the hotel. A pet can only be checked in once.
+- **checkOut(Pet pet):** Removes a pet from the hotel.
+- **isCheckedIn(Pet pet):** Returns true if the pet is currently checked in, otherwise false.
+- **listCheckedInPets():** Returns a list of names of all checked-in pets (as a single string with names separated by commas in order of check-in).

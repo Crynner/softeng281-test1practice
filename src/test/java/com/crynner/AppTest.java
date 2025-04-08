@@ -1069,6 +1069,97 @@ public class AppTest
         }
     }
 
+    @TestMethodOrder(MethodOrderer.MethodName.class)
+    class PetHotelTest {
+
+        private Pet pet1;
+        private Pet pet2;
+        private PetHotel hotel;
+    
+        @BeforeEach
+        void setUp() {
+            // Create Pet objects and a PetHotel object before each test
+            pet1 = new Pet("Buddy", "Cat");
+            pet2 = new Pet("Lucy", "Pterodactyl");
+            hotel = new PetHotel();
+        }
+    
+        // Test Pet class functionality
+    
+        @Test
+        void testPetName() {
+            // Test that the name is correctly initialized and retrieved
+            assertEquals("Buddy", pet1.getName());
+        }
+    
+        @Test
+        void testAssignOwner() {
+            // Test assigning an owner to a pet
+            pet1.assignOwner("John");
+            assertEquals("John", pet1.getOwner());
+        }
+    
+        @Test
+        void testRemoveOwner() {
+            // Test removing an owner from a pet
+            pet1.assignOwner("John");
+            pet1.removeOwner();
+            assertNull(pet1.getOwner());
+        }
+    
+        @Test
+        void testGetOwnerWhenNotAssigned() {
+            // Test that a pet without an owner returns null
+            assertNull(pet2.getOwner());
+        }
+    
+        // Test PetHotel class functionality
+    
+        @Test
+        void testCheckInPet() {
+            // Test checking in a pet
+            hotel.checkIn(pet1);
+            assertTrue(hotel.isGuest(pet1));
+        }
+    
+        @Test
+        void testCheckOutPet() {
+            // Test checking out a pet
+            hotel.checkIn(pet1);
+            hotel.checkOut(pet1);
+            assertFalse(hotel.isGuest(pet1));
+        }
+    
+        @Test
+        void testIsCheckedInBeforeCheckIn() {
+            // Test checking in status before check-in
+            assertFalse(hotel.isGuest(pet2));
+        }
+    
+        @Test
+        void testListCheckedInPets() {
+            // Test listing checked-in pets
+            hotel.checkIn(pet1);
+            hotel.checkIn(pet2);
+            assertEquals("Buddy,Lucy", hotel.listCheckedInPets());
+        }
+    
+        @Test
+        void testCheckInPetTwice() {
+            // Test checking in the same pet twice (should fail)
+            hotel.checkIn(pet1);
+            hotel.checkIn(pet1);  // Should not add the pet a second time
+            assertEquals("Buddy", hotel.listCheckedInPets());
+        }
+    
+        @Test
+        void testCheckOutPetNotCheckedIn() {
+            // Test trying to check out a pet that is not checked in
+            hotel.checkOut(pet1);  // No effect because pet1 was not checked in
+            assertFalse(hotel.isGuest(pet1));
+        }
+    }
+
 
 
 }
