@@ -1,87 +1,106 @@
 package com.crynner;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Library {
-    // Method to add a specific number of copies of a book to the library
+    private Map<LibraryBook, Integer> bookList = new HashMap<>();
+    private Map<LibraryBook, List<User>> borrowList = new HashMap<>();
     public void addBook(LibraryBook book, int copies) {
-        // Implement this method
+        bookList.put(book, copies);
+        borrowList.put(book, new ArrayList<>());
     }
 
-    // Method to allow a user to borrow a book if available
     public void borrowBook(User user, LibraryBook book) {
-        // Implement this method
+        if (bookList.get(book) != 0 && bookList.get(book) != null) {
+            bookList.put(book, bookList.get(book) - 1);
+            borrowList.get(book).add(user);
+            user.borrowBook(book);
+        }
     }
 
     // Method to allow a user to return a borrowed copy of a book
     public void returnBook(User user, LibraryBook book) {
-        // Implement this method
+        if (borrowList.get(book).contains(user)) {
+            bookList.put(book, bookList.get(book) + 1);
+            borrowList.get(book).remove(user);
+            user.returnBook(book);
+        }
     }
 
     // Method to get the number of available copies of the specified book
     public int getAvailableCopies(LibraryBook book) {
-        // Implement this method
-        return 0;
+        return bookList.get(book);
     }
 
     // Method to get a list of users who currently have a copy of the specified book
     public List<User> getPossessors(LibraryBook book) {
-        // Implement this method
-        return null;
+        return borrowList.get(book);
     }
 }
 
 class User {
-    // Constructor to initialize a user with a given name
+    private String name;
+    private List<LibraryBook> borrowedBooks = new ArrayList<>();
+
     public User(String name) {
-        // Implement this method
+        this.name = name;
     }
 
     // Method to return a list of books currently borrowed by the user
     public List<LibraryBook> borrowedBooks() {
-        // Implement this method
-        return null;
+        return borrowedBooks;
     }
 
     // Method to add a borrowed book to the user's list of borrowed books
     public void borrowBook(LibraryBook book) {
-        // Implement this method
+        borrowedBooks.add(book);
     }
 
     // Method to remove a book from the user's borrowed books list
     public void returnBook(LibraryBook book) {
-        // Implement this method
+        borrowedBooks.remove(book);
     }
 
     // Method to return a string representation of the user’s name followed by the list of books they are currently in possession of
     @Override
     public String toString() {
-        // Implement this method
-        return null;
+        String joinedBooks = "";
+        if (borrowedBooks.size() == 0) {
+            joinedBooks = "No books borrowed";
+        } else {
+            for (LibraryBook book : borrowedBooks) {
+                if (!joinedBooks.equals("")) {
+                    joinedBooks += ", ";
+                }
+                joinedBooks += book.getTitle();
+            }
+        }
+        return String.format("%s: %s", name, joinedBooks);
     }
 }
 
 class LibraryBook {
-    // Constructor to initialize a book with a title
+    private String title;
+
     public LibraryBook(String title) {
-        // Implement this method
+        this.title  = title;
     }
 
-    // Method to return the title of the book
     public String getTitle() {
-        // Implement this method
-        return null;
+        return title;
     }
 
     @Override
     public boolean equals(Object obj) {
-        // Implement this method
+        if (!(obj instanceof LibraryBook)) {
+            return false;
+        }
+        if (title == ((LibraryBook)obj).getTitle()) {
+            return true;
+        }
         return false;
-    }
-
-    @Override
-    public int hashCode() {
-        // Implement this method
-        return 0;
     }
 }

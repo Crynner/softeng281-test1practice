@@ -29,8 +29,11 @@ abstract class ChemicalSubstance {
 }
 
 class Element extends ChemicalSubstance {
+    private int atomicNumber;
 
     public Element(String name, String symbol, int atomicNumber) {
+        super(name, symbol);
+        this.atomicNumber = atomicNumber;
     }
 
     public int getAtomicNumber() {
@@ -49,11 +52,15 @@ class Element extends ChemicalSubstance {
 }
 
 class Compound extends ChemicalSubstance {
+    private ArrayList<Element> components;
 
     public Compound(String name, String symbol, ArrayList<Element> components) {
+        super(name, symbol);
+        this.components = components;
     }
 
     public ArrayList<Element> getComponents() {
+        return components;
     }
 
     @Override

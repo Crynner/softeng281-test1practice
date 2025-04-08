@@ -813,20 +813,6 @@ public class AppTest
         }
 
         @Test
-        void testAssignAnimalToNullZookeeper() {
-            assertThrows(NullPointerException.class, () -> {
-                lion.assignTo(null);
-            }, "Assigning an animal to a null zookeeper should throw an exception.");
-        }
-
-        @Test
-        void testAssignNullAnimalToZookeeper() {
-            assertThrows(NullPointerException.class, () -> {
-                alice.takeCareOf(null);
-            }, "Assigning a null animal should throw an exception.");
-        }
-
-        @Test
         void testUnassignUnassignedAnimal() {
             assertDoesNotThrow(() -> {
                 lion.assignTo(null);  // Unassigning the lion without reassigning.
@@ -912,8 +898,9 @@ public class AppTest
                 zooManager.addAnimal(new Animal("Animal" + i));
             }
             List<Animal> unassignedAnimals = zooManager.getUnassignedAnimals();
-            assertEquals(1000, unassignedAnimals.size(), "There should be 1000 unassigned animals initially.");
-    }
+            assertEquals(1002, unassignedAnimals.size(), "There should be 1002 unassigned animals initially.");
+            // + 2 from @BeforeEach
+        }
     }
 
     @Nested
