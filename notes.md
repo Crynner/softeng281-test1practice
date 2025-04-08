@@ -193,7 +193,7 @@ Create a `Library` class and a `User` class for a library system. The library ca
 
 ---
 
-## Animal Class
+## 8. Animal Class
 
 ### Methods
 
@@ -250,3 +250,142 @@ Create a `Library` class and a `User` class for a library system. The library ca
 
 - **getIdleZookeepers()**:  
   Returns a list of zookeepers not responsible for any animals.
+
+---
+
+## 9. Java OOP Task: Publication and Book Classes
+
+### **Task Overview**
+
+Complete the `Publication`, `Book`, and `Magazine` classes as follows:
+
+### **1. Class Hierarchy**
+- `Publication` is an **abstract class** representing any general publication.
+- `Book` and `Magazine` are **subclasses** of `Publication`.
+
+### **2. Fields and Constructors**
+
+#### **Publication**
+- Fields:
+  - `title` (String): The title of the publication.
+  - `year` (int): The year it was published.
+- Constructor:
+  - `Publication(String title, int year)` initializes these fields.
+
+#### **Book**
+- Fields:
+  - `author` (String): The name of the author.
+  - `pages` (int): The number of pages.
+- Constructors:
+  - `Book(String title, int year, String author, int pages)`
+  - `Book(String title, String author)`  
+    Defaults `year` to 2024 and `pages` to 100.
+
+#### **Magazine**
+- Fields:
+  - `issueNumber` (int): The magazine’s issue number.
+  - `monthly` (boolean): Whether it is a monthly publication.
+- Constructor:
+  - `Magazine(String title, int year, int issueNumber, boolean monthly)`
+
+### **3. Abstract and Overridden Methods**
+
+- **Publication** defines:
+  - `public abstract int getLength()`  
+    Returns the length of the publication (pages or issue number).
+  - `public abstract void updateInfo()`  
+    Updates internal data (see below).
+  - `public String getSummary()`  
+    Returns `"<title> - <year>"`
+
+- **Book** implements:
+  - `getLength()` as the number of pages.
+  - `updateInfo()` increases the number of pages by 10.
+
+- **Magazine** implements:
+  - `getLength()` as the issue number.
+  - `updateInfo()` increases the issue number by 1.  
+    If monthly, also increases the year by 1.
+
+### **4. String Representation**
+
+- **Book**:  
+  `"<title> by <author> (<pages> pages)"`
+- **Magazine**:  
+  `"<title> - Issue <issueNumber> (<year>)"`
+
+## You Must Implement:
+
+- All constructors and fields.
+- Abstract class with abstract and concrete methods.
+- Method overriding in subclasses.
+- Custom `toString()` methods.
+- Use of polymorphism (`Publication` references holding `Book` or `Magazine` objects`).
+
+---
+
+## 10. Chemical Substances and Reactions
+
+### **Task Overview**
+
+Complete the `ChemicalSubstance`, `Element`, and `Compound` classes as follows:
+
+### **1. Class Hierarchy**
+
+- `ChemicalSubstance` is an **abstract class** representing a generic chemical.
+- `Element` and `Compound` are **concrete subclasses** of `ChemicalSubstance`.
+
+### **2. Fields and Constructors**
+
+#### **ChemicalSubstance**
+- Fields:
+  - `name` (String): The name of the chemical.
+  - `symbol` (String): The chemical symbol.
+- Constructor:
+  - `ChemicalSubstance(String name, String symbol)`
+
+#### **Element**
+- Additional Fields:
+  - `atomicNumber` (int)
+- Constructor:
+  - `Element(String name, String symbol, int atomicNumber)`
+
+#### **Compound**
+- Additional Fields:
+  - `components` (ArrayList<Element>): List of elements that make up the compound.
+- Constructor:
+  - `Compound(String name, String symbol, ArrayList<Element> components)`
+
+### **3. Methods and Behaviors**
+
+#### **ChemicalSubstance**
+- Abstract Methods:
+  - `public abstract String describe()`:  
+    Returns a textual description of the substance.
+  - `public abstract boolean reactsWith(ChemicalSubstance other)`:  
+    Determines if this substance reacts with another.
+
+#### **Element**
+- Implements `describe()` as:  
+  `"<name> [<symbol>] - Atomic Number: <atomicNumber>"`
+- Implements `reactsWith(ChemicalSubstance other)`:
+  - Returns `true` if the other is a `Compound` and this element is part of it.
+  - Otherwise, returns `false`.
+
+#### **Compound**
+- Implements `describe()` as:  
+  `"<name> [<symbol>] - Composed of: <list of element symbols>"`
+- Implements `reactsWith(ChemicalSubstance other)`:
+  - Returns `true` if the other is an `Element` and is part of this compound.
+  - Otherwise, returns `false`.
+
+### **4. Additional Requirements**
+- Use appropriate encapsulation (fields should be private, with getters if needed).
+- Override `toString()` to return the same string as `describe()` for each subclass.
+- Support flexible object interaction (e.g., `Element` reacts with `Compound`, `Compound` with `Element`).
+
+### You Must Implement:
+- An abstract base class and two subclasses.
+- Object-to-object interaction using polymorphism.
+- ArrayList usage to store compound components.
+- String formatting and dynamic descriptions.

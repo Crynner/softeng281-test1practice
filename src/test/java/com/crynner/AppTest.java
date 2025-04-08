@@ -903,6 +903,172 @@ public class AppTest
     }
     }
 
+    @TestMethodOrder(MethodOrderer.MethodName.class)
+    public static class PublicationTest {
+
+        @Test
+        void testBookConstructorFull() {
+            Book book = new Book("1984", 1949, "George Orwell", 328);
+            assertEquals("1984 - 1949", book.getSummary());
+            assertEquals(328, book.getLength());
+            assertEquals("1984 by George Orwell (328 pages)", book.toString());
+        }
+    
+        @Test
+        void testBookConstructorWithDefaults() {
+            Book book = new Book("Dune", "Frank Herbert");
+            assertEquals("Dune - 2024", book.getSummary());
+            assertEquals(100, book.getLength());
+        }
+    
+        @Test
+        void testBookUpdateInfoIncreasesPages() {
+            Book book = new Book("Dune", "Frank Herbert");
+            book.updateInfo();
+            assertEquals(110, book.getLength());
+        }
+    
+        @Test
+        void testMagazineConstructor() {
+            Magazine mag = new Magazine("Tech Monthly", 2022, 5, true);
+            assertEquals("Tech Monthly - 2022", mag.getSummary());
+            assertEquals(5, mag.getLength());
+            assertEquals("Tech Monthly - Issue 5 (2022)", mag.toString());
+        }
+    
+        @Test
+        void testMagazineUpdateMonthly() {
+            Magazine mag = new Magazine("Science Today", 2023, 10, true);
+            mag.updateInfo();
+            assertEquals(11, mag.getLength());
+            assertEquals("Science Today - 2024", mag.getSummary());
+        }
+    
+        @Test
+        void testMagazineUpdateNonMonthly() {
+            Magazine mag = new Magazine("Annual Digest", 2023, 1, false);
+            mag.updateInfo();
+            assertEquals(2, mag.getLength());
+            assertEquals("Annual Digest - 2023", mag.getSummary());
+        }
+    
+        @Test
+        void testPolymorphismWithPublicationArray() {
+            Publication[] items = {
+                new Book("1984", 1949, "George Orwell", 328),
+                new Magazine("Tech Monthly", 2024, 8, true)
+            };
+            assertEquals(328, items[0].getLength());
+            assertEquals(8, items[1].getLength());
+        }
+    
+        @Test
+        void testMultipleBookUpdates() {
+            Book book = new Book("A Tale", 2024, "Author", 90);
+            book.updateInfo();
+            book.updateInfo();
+            assertEquals(110, book.getLength());
+        }
+    
+        @Test
+        void testMultipleMagazineUpdatesMonthly() {
+            Magazine mag = new Magazine("Space Today", 2020, 12, true);
+            mag.updateInfo(); // issue = 13, year = 2021
+            mag.updateInfo(); // issue = 14, year = 2022
+            assertEquals(14, mag.getLength());
+            assertEquals("Space Today - 2022", mag.getSummary());
+        }
+    
+        @Test
+        void testToStringMethods() {
+            Book b = new Book("Winds of Winter", 2024, "GRRM", 500);
+            Magazine m = new Magazine("World News", 2022, 3, false);
+            assertEquals("Winds of Winter by GRRM (500 pages)", b.toString());
+            assertEquals("World News - Issue 3 (2022)", m.toString());
+        }
+    }
+
+    @TestMethodOrder(MethodOrderer.MethodName.class)
+    public static class ChemicalSubstanceTest {
+        Element hydrogen;
+        Element oxygen;
+        Element carbon;
+        Compound water;
+        Compound carbonDioxide;
+    
+        @BeforeEach
+        void setup() {
+            hydrogen = new Element("Hydrogen", "H", 1);
+            oxygen = new Element("Oxygen", "O", 8);
+            carbon = new Element("Carbon", "C", 6);
+    
+            ArrayList<Element> h2oComponents = new ArrayList<>();
+            h2oComponents.add(hydrogen);
+            h2oComponents.add(oxygen);
+            water = new Compound("Water", "H2O", h2oComponents);
+    
+            ArrayList<Element> co2Components = new ArrayList<>();
+            co2Components.add(carbon);
+            co2Components.add(oxygen);
+            carbonDioxide = new Compound("Carbon Dioxide", "CO2", co2Components);
+        }
+    
+        @Test
+        void testElementDescribe() {
+            assertEquals("Hydrogen [H] - Atomic Number: 1", hydrogen.describe());
+        }
+    
+        @Test
+        void testCompoundDescribe() {
+            assertEquals("Water [H2O] - Composed of: H, O", water.describe());
+        }
+    
+        @Test
+        void testElementReactWithCompoundTrue() {
+            assertTrue(hydrogen.reactsWith(water));
+        }
+    
+        @Test
+        void testElementReactWithCompoundFalse() {
+            assertFalse(carbon.reactsWith(water));
+        }
+    
+        @Test
+        void testCompoundReactWithElementTrue() {
+            assertTrue(water.reactsWith(oxygen));
+        }
+    
+        @Test
+        void testCompoundReactWithElementFalse() {
+            assertFalse(water.reactsWith(carbon));
+        }
+    
+        @Test
+        void testToStringOverrideForElement() {
+            assertEquals(hydrogen.describe(), hydrogen.toString());
+        }
+    
+        @Test
+        void testToStringOverrideForCompound() {
+            assertEquals(water.describe(), water.toString());
+        }
+    
+        @Test
+        void testGettersInElement() {
+            assertEquals(8, oxygen.getAtomicNumber());
+            assertEquals("Oxygen", oxygen.getName());
+            assertEquals("O", oxygen.getSymbol());
+        }
+    
+        @Test
+        void testCompoundContainsCorrectElements() {
+            ArrayList<Element> elements = carbonDioxide.getComponents();
+            assertTrue(elements.contains(carbon));
+            assertTrue(elements.contains(oxygen));
+            assertEquals(2, elements.size());
+        }
+    }
+
 
 
 }
