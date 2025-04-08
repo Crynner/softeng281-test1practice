@@ -165,3 +165,285 @@ Complete the `BankAccount` class as follows:
 - The `transferTo(BankAccount other, double amount)` method transfers money if sufficient funds exist.
 - Use a **static variable** to track the number of accounts created.
 - The `getTotalAccounts()` static method returns the number of total accounts.
+
+---
+
+## 7. Library System with Borrowing, Multiple Copies, and Tracking Possession
+
+### Question:
+Create a `Library` class and a `User` class for a library system. The library can own multiple copies of the same book, and multiple users can borrow a copy of the book if one is available. Additionally, you should be able to find out who is in possession of each copy of a given book. Implement the following:
+
+- **`Library` class**:
+  - `addBook(Book book, int copies)`: Adds a specific number of copies of a book to the library.
+  - `borrowBook(User user, Book book)`: Allows a user to borrow a book. A user can only borrow a copy if there are available copies in the library.
+  - `returnBook(User user, Book book)`: Allows a user to return a borrowed copy of a book. When a book is returned, it becomes available for other users to borrow.
+  - `getAvailableCopies(Book book)`: Returns the number of available copies of a book in the library.
+  - `getPossessors(Book book)`: Returns a list of `User` objects who currently have a copy of the specified book.
+
+- **`User` class**:
+  - `User(String name)`: Initializes a user with a given name.
+  - `borrowedBooks()`: Returns a list of books currently borrowed by the user.
+  - `borrowBook(Book book)`: Adds a borrowed book to the user’s list of borrowed books.
+  - `returnBook(Book book)`: Removes a book from the user’s borrowed books list.
+  - `toString()`: Returns a string representation of the user’s name followed by the list of books they are currently in possession of.
+
+- **`Book` class**:
+  - `Book(String title)`: Initializes a book with a title.
+  - `getTitle()`: Returns the title of the book.
+
+---
+
+## 8. Animal Class
+
+### Methods
+
+- **Animal(String species)**:  
+  Creates a new animal of the given species.
+
+- **assignTo(Zookeeper zookeeper)**:  
+  Assigns the animal to the given zookeeper.  
+  If the animal was previously assigned to someone else, they are unassigned from the previous zookeeper.  
+  Assignment is mutual — the animal knows its zookeeper, and the zookeeper knows which animals they care for.
+
+- **hasZookeeper()**:  
+  Returns `true` if the animal has a zookeeper.
+
+- **getZookeeper()**:  
+  Returns the current zookeeper assigned to this animal, or `null` if none.
+
+- **toString()**:  
+  Returns the species of the animal as a string.
+
+
+### Zookeeper Class
+
+- **Zookeeper(String name)**:  
+  Creates a zookeeper with the given name.
+
+- **takeCareOf(Animal animal)**:  
+  Assigns the animal to this zookeeper.  
+  If the animal was already cared for by someone else, remove it from that zookeeper first.
+
+- **getAssignedAnimals()**:  
+  Returns a list of animals this zookeeper is responsible for.
+
+- **caresFor(Animal animal)**:  
+  Returns `true` if the zookeeper is currently responsible for that animal.
+
+- **toString()**:  
+  Returns the zookeeper's name followed by the number of animals, e.g., "Sam (3 animals)".
+
+
+### ZooManager Class
+
+- **addZookeeper(Zookeeper zookeeper)**:  
+  Adds a zookeeper to the zoo system.
+
+- **addAnimal(Animal animal)**:  
+  Adds an animal to the zoo.
+
+- **assignAnimalToZookeeper(Animal animal, Zookeeper zookeeper)**:  
+  Assigns the animal to the zookeeper.
+
+- **getUnassignedAnimals()**:  
+  Returns a list of animals that currently don’t have a zookeeper.
+
+- **getIdleZookeepers()**:  
+  Returns a list of zookeepers not responsible for any animals.
+
+---
+
+## 9. Java OOP Task: Publication and Book Classes
+
+### **Task Overview**
+
+Complete the `Publication`, `Book`, and `Magazine` classes as follows:
+
+### **1. Class Hierarchy**
+- `Publication` is an **abstract class** representing any general publication.
+- `Book` and `Magazine` are **subclasses** of `Publication`.
+
+### **2. Fields and Constructors**
+
+#### **Publication**
+- Fields:
+  - `title` (String): The title of the publication.
+  - `year` (int): The year it was published.
+- Constructor:
+  - `Publication(String title, int year)` initializes these fields.
+
+#### **Book**
+- Fields:
+  - `author` (String): The name of the author.
+  - `pages` (int): The number of pages.
+- Constructors:
+  - `Book(String title, int year, String author, int pages)`
+  - `Book(String title, String author)`  
+    Defaults `year` to 2024 and `pages` to 100.
+
+#### **Magazine**
+- Fields:
+  - `issueNumber` (int): The magazine’s issue number.
+  - `monthly` (boolean): Whether it is a monthly publication.
+- Constructor:
+  - `Magazine(String title, int year, int issueNumber, boolean monthly)`
+
+### **3. Abstract and Overridden Methods**
+
+- **Publication** defines:
+  - `public abstract int getLength()`  
+    Returns the length of the publication (pages or issue number).
+  - `public abstract void updateInfo()`  
+    Updates internal data (see below).
+  - `public String getSummary()`  
+    Returns `"<title> - <year>"`
+
+- **Book** implements:
+  - `getLength()` as the number of pages.
+  - `updateInfo()` increases the number of pages by 10.
+
+- **Magazine** implements:
+  - `getLength()` as the issue number.
+  - `updateInfo()` increases the issue number by 1.  
+    If monthly, also increases the year by 1.
+
+### **4. String Representation**
+
+- **Book**:  
+  `"<title> by <author> (<pages> pages)"`
+- **Magazine**:  
+  `"<title> - Issue <issueNumber> (<year>)"`
+
+## You Must Implement:
+
+- All constructors and fields.
+- Abstract class with abstract and concrete methods.
+- Method overriding in subclasses.
+- Custom `toString()` methods.
+- Use of polymorphism (`Publication` references holding `Book` or `Magazine` objects`).
+
+---
+
+## 10. Chemical Substances and Reactions
+
+### **Task Overview**
+
+Complete the `ChemicalSubstance`, `Element`, and `Compound` classes as follows:
+
+### **1. Class Hierarchy**
+
+- `ChemicalSubstance` is an **abstract class** representing a generic chemical.
+- `Element` and `Compound` are **concrete subclasses** of `ChemicalSubstance`.
+
+### **2. Fields and Constructors**
+
+#### **ChemicalSubstance**
+- Fields:
+  - `name` (String): The name of the chemical.
+  - `symbol` (String): The chemical symbol.
+- Constructor:
+  - `ChemicalSubstance(String name, String symbol)`
+
+#### **Element**
+- Additional Fields:
+  - `atomicNumber` (int)
+- Constructor:
+  - `Element(String name, String symbol, int atomicNumber)`
+
+#### **Compound**
+- Additional Fields:
+  - `components` (ArrayList<Element>): List of elements that make up the compound.
+- Constructor:
+  - `Compound(String name, String symbol, ArrayList<Element> components)`
+
+### **3. Methods and Behaviors**
+
+#### **ChemicalSubstance**
+- Abstract Methods:
+  - `public abstract String describe()`:  
+    Returns a textual description of the substance.
+  - `public abstract boolean reactsWith(ChemicalSubstance other)`:  
+    Determines if this substance reacts with another.
+
+#### **Element**
+- Implements `describe()` as:  
+  `"<name> [<symbol>] - Atomic Number: <atomicNumber>"`
+- Implements `reactsWith(ChemicalSubstance other)`:
+  - Returns `true` if the other is a `Compound` and this element is part of it.
+  - Otherwise, returns `false`.
+
+#### **Compound**
+- Implements `describe()` as:  
+  `"<name> [<symbol>] - Composed of: <list of element symbols>"`
+- Implements `reactsWith(ChemicalSubstance other)`:
+  - Returns `true` if the other is an `Element` and is part of this compound.
+  - Otherwise, returns `false`.
+
+### **4. Additional Requirements**
+- Use appropriate encapsulation (fields should be private, with getters if needed).
+- Override `toString()` to return the same string as `describe()` for each subclass.
+- Support flexible object interaction (e.g., `Element` reacts with `Compound`, `Compound` with `Element`).
+
+### You Must Implement:
+- An abstract base class and two subclasses.
+- Object-to-object interaction using polymorphism.
+- ArrayList usage to store compound components.
+- String formatting and dynamic descriptions.
+
+---
+
+## 11. Pet & PetHotel
+
+### Requirements for the Pet class
+Complete the Pet class as follows:
+
+- **Pet(String name):** Initializes a new Pet with a given name.
+- **getName():** Returns the name of the pet.
+- **getOwner():** Returns the name of the pet's owner, or null if not owned.
+- **assignOwner(String ownerName):** Assigns or reassigns the owner of this pet.
+- **removeOwner():** Removes the owner of this pet.
+
+### Requirements for the PetHotel class
+Complete the PetHotel class as follows:
+
+- **checkIn(Pet pet):** Adds a pet to the hotel. A pet can only be checked in once.
+- **checkOut(Pet pet):** Removes a pet from the hotel.
+- **isCheckedIn(Pet pet):** Returns true if the pet is currently checked in, otherwise false.
+- **listCheckedInPets():** Returns a list of names of all checked-in pets (as a single string with names separated by commas in order of check-in).
+
+---
+
+## 12. Experiment & ExperimentTracker
+
+### Requirements for the Experiment class
+Complete the Experiment class as follows:
+
+- **Experiment(String name, boolean success):** Initializes an experiment with a given name and success status.
+- **getName():** Returns the name of the experiment.
+- **wasSuccessful():** Returns a boolean indicating if the experiment was successful.
+- **toString():** Returns a string representation of the experiment in the format: `"name - Success"` or `"name - Failure"`, depending on the success of the experiment.
+
+### Requirements for the ExperimentTracker class
+Complete the ExperimentTracker class as follows:
+
+- **addExperiment(Experiment exp):** Adds an experiment to the tracker.
+- **countSuccessful():** Returns the number of successful experiments that have been added to the tracker.
+
+---
+
+## 13. TeamMember & TeamManager
+
+### Requirements for the TeamMember class
+Complete the TeamMember class as follows:
+
+- **TeamMember(String name, String role):** Initializes a team member with a given name and role.
+- **getName():** Returns the name of the team member.
+- **getRole():** Returns the role of the team member.
+- **toString():** Returns a string representation of the team member in the format: `"name the role"`.
+
+### Requirements for the TeamManager class
+Complete the TeamManager class as follows:
+
+- **addMember(TeamMember member):** Adds a team member to the team.
+- **hasMember(TeamMember member):** Returns true if the team contains the specified member, otherwise false.
+- **teamSize():** Returns the size of the team (the number of members in the team).

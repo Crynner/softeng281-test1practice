@@ -6,23 +6,32 @@ import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Nested;
 
 
 
 public class AppTest 
 {
+    @Test
+    void TestFix() {
+        assertTrue(true);
+    }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class SteelFabricationManagerTest {
+    class SteelFabricationManagerTest {
 
         SteelFabricationManager manager;
     
@@ -102,8 +111,9 @@ public class AppTest
         }
     }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class BankAccountTest {
+    public class BankAccountTest {
 
         BankAccount account1;
         BankAccount account2;
@@ -183,8 +193,9 @@ public class AppTest
         }
     }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class SpaceFleetTest {
+    public class SpaceFleetTest {
     
         SpaceFleet fleet;
 
@@ -275,8 +286,9 @@ public class AppTest
         }
     }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class CharacterTest {
+    public class CharacterTest {
 
         @Test
         void testWarriorCreation() {
@@ -341,8 +353,9 @@ public class AppTest
         }
     }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class DisasterEventTest {
+    public class DisasterEventTest {
 
         // Test 1: Constructor 1 - Only ID and Name
         @Test
@@ -435,8 +448,9 @@ public class AppTest
         }
     }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class CriminalInvestigationTests {
+    public class CriminalInvestigationTests {
         @AfterEach
         public void reset() {
             CriminalInvestigation.resetTotalCases();
@@ -537,4 +551,817 @@ public class AppTest
             assertEquals(2, CriminalInvestigation.getTotalCases());
         }
     }
+
+    @Nested
+    @TestMethodOrder(MethodOrderer.MethodName.class)
+    public class LibrarySystemTest {
+
+        private Library library;
+        private LibraryBook book1;
+        private LibraryBook book2;
+        private User user1;
+        private User user2;
+        private User user3;
+
+        @BeforeEach
+        public void setUp() {
+            library = new Library();
+            book1 = new LibraryBook("Java Programming");
+            book2 = new LibraryBook("Algorithms 101");
+            user1 = new User("Alice");
+            user2 = new User("Bob");
+            user3 = new User("Charlie");
+            library.addBook(book1, 3); // Add 3 copies of "Java Programming"
+            library.addBook(book2, 2); // Add 2 copies of "Algorithms 101"
+        }
+
+        @Test
+        public void testBorrowBookWhenAvailable() {
+            // User1 borrows a book
+            library.borrowBook(user1, book1);
+            assertEquals(2, library.getAvailableCopies(book1)); // 2 copies should be available
+            assertTrue(user1.borrowedBooks().contains(book1)); // User1 should have borrowed the book
+        }
+
+        @Test
+        public void testBorrowBookWhenNoCopiesAvailable() {
+            // User1 borrows all copies of the book
+            library.borrowBook(user1, book1);
+            library.borrowBook(user2, book1);
+            library.borrowBook(user3, book1);
+
+            // There are no more available copies
+            assertEquals(0, library.getAvailableCopies(book1));
+
+            // Now, if a fourth user tries to borrow the book, it should fail
+            User user4 = new User("Dave");
+            library.borrowBook(user4, book1);
+            assertEquals(0, library.getAvailableCopies(book1)); // Still 0 available copies
+            assertFalse(user4.borrowedBooks().contains(book1)); // User4 shouldn't have borrowed the book
+        }
+
+        @Test
+        public void testReturnBook() {
+            // User1 borrows and then returns a book
+            library.borrowBook(user1, book1);
+            assertEquals(2, library.getAvailableCopies(book1)); // 2 copies should be available
+
+            library.returnBook(user1, book1);
+            assertEquals(3, library.getAvailableCopies(book1)); // 3 copies should be available now
+            assertFalse(user1.borrowedBooks().contains(book1)); // User1 should not have the book anymore
+        }
+
+        @Test
+        public void testGetPossessors() {
+            // User1 and User2 borrow a copy of the book
+            library.borrowBook(user1, book1);
+            library.borrowBook(user2, book1);
+
+            List<User> possessors = library.getPossessors(book1);
+            assertEquals(2, possessors.size());
+            assertTrue(possessors.contains(user1));
+            assertTrue(possessors.contains(user2));
+        }
+
+        @Test
+        public void testUserToStringNoBooks() {
+            // Test the toString method when the user has no books borrowed
+            assertEquals("Alice: No books borrowed", user1.toString());
+        }
+
+        @Test
+        public void testUserToStringWithBooks() {
+            // User1 borrows a book and we check toString
+            library.borrowBook(user1, book1);
+            assertEquals("Alice: Java Programming", user1.toString());
+        }
+
+        @Test
+        public void testMultipleUsersBorrowSameBook() {
+            // User1 and User2 borrow a copy of the same book
+            library.borrowBook(user1, book2);
+            library.borrowBook(user2, book2);
+
+            assertTrue(user1.borrowedBooks().contains(book2));
+            assertTrue(user2.borrowedBooks().contains(book2));
+            assertEquals(0, library.getAvailableCopies(book2)); // No copies left
+        }
+
+        @Test
+        public void testReturnBookAndBorrowAgain() {
+            // User1 borrows a book, then returns it, and borrows it again
+            library.borrowBook(user1, book1);
+            library.returnBook(user1, book1);
+            library.borrowBook(user1, book1); // Borrow again
+
+            assertTrue(user1.borrowedBooks().contains(book1)); // User1 should have the book again
+            assertEquals(2, library.getAvailableCopies(book1)); // 2 copies should be available
+        }
+
+        @Test
+        public void testBorrowBookWhenLibraryEmpty() {
+            // Try to borrow a book when no copies are available
+            library.borrowBook(user1, book1);
+            library.borrowBook(user2, book1);
+            library.borrowBook(user3, book1); // All copies are borrowed
+
+            // There should be no more available copies
+            assertEquals(0, library.getAvailableCopies(book1));
+
+            User user4 = new User("Dave");
+            library.borrowBook(user4, book1); // User4 tries to borrow, should fail
+            assertFalse(user4.borrowedBooks().contains(book1)); // User4 should not have the book
+        }
+
+        @Test
+        public void testComprehensiveTest() {
+            // Borrowing, returning, multiple users, and possession tracking
+            library.borrowBook(user1, book1);
+            library.borrowBook(user2, book2);
+            library.borrowBook(user3, book1);
+
+            // Assert borrowed books for each user
+            assertTrue(user1.borrowedBooks().contains(book1));
+            assertTrue(user2.borrowedBooks().contains(book2));
+            assertTrue(user3.borrowedBooks().contains(book1));
+
+            // Assert the library’s available copies
+            assertEquals(1, library.getAvailableCopies(book1)); // 1 copy of book1 left
+            assertEquals(1, library.getAvailableCopies(book2)); // 1 copy of book2 left
+
+            // Return a book and check the system again
+            library.returnBook(user1, book1);
+            assertEquals(2, library.getAvailableCopies(book1)); // 2 copies should be available now
+            assertFalse(user1.borrowedBooks().contains(book1)); // User1 should not have book1 anymore
+
+            // User1 borrows again
+            library.borrowBook(user1, book1);
+            assertTrue(user1.borrowedBooks().contains(book1)); // User1 should now have book1
+            assertEquals(1, library.getAvailableCopies(book1)); // Only 1 copy left in the library
+
+            // Get and assert all possessors of book1
+            List<User> possessors = library.getPossessors(book1);
+            assertEquals(2, possessors.size());
+            assertTrue(possessors.contains(user1));
+            assertTrue(possessors.contains(user3));
+        }
+    }
+
+    @Nested
+    @TestMethodOrder(MethodOrderer.MethodName.class)
+    public class ZooTest {
+
+        private Animal lion;
+        private Animal tiger;
+        private Zookeeper alice;
+        private Zookeeper bob;
+        private ZooManager zooManager;
+    
+        @BeforeEach
+        void setUp() {
+            lion = new Animal("Lion");
+            tiger = new Animal("Tiger");
+            alice = new Zookeeper("Alice");
+            bob = new Zookeeper("Bob");
+            zooManager = new ZooManager();
+            
+            zooManager.addZookeeper(alice);
+            zooManager.addZookeeper(bob);
+            zooManager.addAnimal(lion);
+            zooManager.addAnimal(tiger);
+        }
+    
+        @Test
+        void testAnimalHasNoZookeeperInitially() {
+            assertFalse(lion.hasZookeeper(), "Lion should not have a zookeeper initially.");
+            assertFalse(tiger.hasZookeeper(), "Tiger should not have a zookeeper initially.");
+        }
+    
+        @Test
+        void testAssignAnimalToZookeeper() {
+            lion.assignTo(alice);
+            assertTrue(lion.hasZookeeper(), "Lion should have a zookeeper after being assigned.");
+            assertEquals(alice, lion.getZookeeper(), "The zookeeper assigned to the lion should be Alice.");
+        }
+    
+        @Test
+        void testAssignMultipleAnimalsToZookeeper() {
+            lion.assignTo(alice);
+            tiger.assignTo(alice);
+            List<Animal> assignedAnimals = alice.getAssignedAnimals();
+            
+            assertEquals(2, assignedAnimals.size(), "Alice should be assigned 2 animals.");
+            assertTrue(assignedAnimals.contains(lion), "Alice should take care of the lion.");
+            assertTrue(assignedAnimals.contains(tiger), "Alice should take care of the tiger.");
+        }
+    
+        @Test
+        void testReassignAnimalToAnotherZookeeper() {
+            lion.assignTo(alice);
+            lion.assignTo(bob);
+            
+            List<Animal> aliceAnimals = alice.getAssignedAnimals();
+            List<Animal> bobAnimals = bob.getAssignedAnimals();
+            
+            assertTrue(bobAnimals.contains(lion), "Bob should be assigned the lion after reassigning.");
+            assertFalse(aliceAnimals.contains(lion), "Alice should no longer be assigned the lion.");
+        }
+    
+        @Test
+        void testZookeeperCaresForAnimal() {
+            lion.assignTo(alice);
+            assertTrue(alice.caresFor(lion), "Alice should care for the lion.");
+            assertFalse(bob.caresFor(lion), "Bob should not care for the lion.");
+        }
+    
+        @Test
+        void testZooManagerAddZookeeper() {
+            assertEquals(2, zooManager.getIdleZookeepers().size(), "There should be 2 idle zookeepers initially.");
+        }
+    
+        @Test
+        void testZooManagerGetUnassignedAnimals() {
+            List<Animal> unassignedAnimals = zooManager.getUnassignedAnimals();
+            assertEquals(2, unassignedAnimals.size(), "There should be 2 unassigned animals initially.");
+        }
+    
+        @Test
+        void testZooManagerAssignAnimalToZookeeper() {
+            zooManager.assignAnimalToZookeeper(lion, alice);
+            List<Animal> aliceAnimals = alice.getAssignedAnimals();
+            assertTrue(aliceAnimals.contains(lion), "Lion should be assigned to Alice via ZooManager.");
+        }
+    
+        @Test
+        void testZooManagerGetIdleZookeepers() {
+            zooManager.assignAnimalToZookeeper(lion, alice);
+            List<Zookeeper> idleZookeepers = zooManager.getIdleZookeepers();
+            assertEquals(1, idleZookeepers.size(), "There should be 1 idle zookeeper after assigning an animal.");
+            assertTrue(idleZookeepers.contains(bob), "Bob should be the idle zookeeper.");
+        }
+    
+        @Test
+        void testZookeeperToString() {
+            lion.assignTo(alice);
+            tiger.assignTo(bob);
+            
+            String aliceToString = alice.toString();
+            String bobToString = bob.toString();
+            
+            assertEquals("Alice (1 animals)", aliceToString, "Alice's toString should return the correct format.");
+            assertEquals("Bob (1 animals)", bobToString, "Bob's toString should return the correct format.");
+        }
+
+        @Test
+        void testAssignAnimalToNullZookeeper() {
+            assertThrows(NullPointerException.class, () -> {
+                lion.assignTo(null);
+            }, "Assigning an animal to a null zookeeper should throw an exception.");
+        }
+
+        @Test
+        void testAssignNullAnimalToZookeeper() {
+            assertThrows(NullPointerException.class, () -> {
+                alice.takeCareOf(null);
+            }, "Assigning a null animal should throw an exception.");
+        }
+
+        @Test
+        void testUnassignUnassignedAnimal() {
+            assertDoesNotThrow(() -> {
+                lion.assignTo(null);  // Unassigning the lion without reassigning.
+                assertNull(lion.getZookeeper(), "Lion should have no zookeeper after unassignment.");
+            });
+        }
+
+        @Test
+        void testReassignAnimalToSameZookeeper() {
+            lion.assignTo(alice);
+            lion.assignTo(alice); // Reassigning the same animal to the same zookeeper
+        
+            List<Animal> assignedAnimals = alice.getAssignedAnimals();
+            assertEquals(1, assignedAnimals.size(), "Alice should still be assigned only 1 animal.");
+            assertTrue(assignedAnimals.contains(lion), "Alice should take care of the lion.");
+        }
+
+        @Test
+        void testAssignAnimalToZookeeperWhoAlreadyCaresForIt() {
+            lion.assignTo(alice);
+            assertDoesNotThrow(() -> {
+                alice.takeCareOf(lion); // Reassigning the lion to the same zookeeper
+            }, "Assigning the same animal to the same zookeeper should not cause any error.");
+        }
+
+        // Behavioral Tests
+
+        @Test
+        void testToStringForAnimalWithoutZookeeper() {
+            assertEquals("Lion", lion.toString(), "The string representation of an unassigned animal should be its species.");
+        }
+
+        @Test
+        void testToStringForZookeeperWithoutAnimals() {
+            assertEquals("Alice (0 animals)", alice.toString(), "A zookeeper with no animals should display '0 animals'.");
+        }
+
+        @Test
+        void testCaresForUnassignedAnimal() {
+            assertFalse(alice.caresFor(lion), "Alice should not care for the lion since it is not assigned.");
+        }
+
+        @Test
+        void testToStringAfterAnimalsAssigned() {
+            lion.assignTo(alice);
+            tiger.assignTo(alice);
+            assertEquals("Alice (2 animals)", alice.toString(), "Alice should now have 2 animals after assignment.");
+        }
+
+        // Edge Case Testing
+
+        @Test
+        void testAnimalWithEmptySpecies() {
+            Animal emptySpeciesAnimal = new Animal("");
+            assertEquals("", emptySpeciesAnimal.toString(), "Animal with an empty species name should return an empty string.");
+        }
+
+        @Test
+        void testZookeeperWithEmptyName() {
+            Zookeeper emptyNameZookeeper = new Zookeeper("");
+            assertEquals(" (0 animals)", emptyNameZookeeper.toString(), "Zookeeper with an empty name should still display the correct format.");
+        }
+
+        @Test
+        void testAddingAnimalsWithoutZookeepers() {
+            zooManager.addAnimal(new Animal("Giraffe"));
+            zooManager.addAnimal(new Animal("Elephant"));
+            List<Animal> unassignedAnimals = zooManager.getUnassignedAnimals();
+            assertEquals(4, unassignedAnimals.size(), "There should be 4 unassigned animals when no zookeepers are added.");
+        }
+
+        @Test
+        void testAssignAllAnimalsToOneZookeeper() {
+            lion.assignTo(alice);
+            tiger.assignTo(alice);
+            List<Animal> assignedAnimals = alice.getAssignedAnimals();
+            assertEquals(2, assignedAnimals.size(), "Alice should now care for both the lion and the tiger.");
+        }
+
+        @Test
+        void testAddingLargeNumberOfAnimals() {
+            for (int i = 0; i < 1000; i++) {
+                zooManager.addAnimal(new Animal("Animal" + i));
+            }
+            List<Animal> unassignedAnimals = zooManager.getUnassignedAnimals();
+            assertEquals(1000, unassignedAnimals.size(), "There should be 1000 unassigned animals initially.");
+    }
+    }
+
+    @Nested
+    @TestMethodOrder(MethodOrderer.MethodName.class)
+    public class PublicationTest {
+
+        @Test
+        void testBookConstructorFull() {
+            Book book = new Book("1984", 1949, "George Orwell", 328);
+            assertEquals("1984 - 1949", book.getSummary());
+            assertEquals(328, book.getLength());
+            assertEquals("1984 by George Orwell (328 pages)", book.toString());
+        }
+    
+        @Test
+        void testBookConstructorWithDefaults() {
+            Book book = new Book("Dune", "Frank Herbert");
+            assertEquals("Dune - 2024", book.getSummary());
+            assertEquals(100, book.getLength());
+        }
+    
+        @Test
+        void testBookUpdateInfoIncreasesPages() {
+            Book book = new Book("Dune", "Frank Herbert");
+            book.updateInfo();
+            assertEquals(110, book.getLength());
+        }
+    
+        @Test
+        void testMagazineConstructor() {
+            Magazine mag = new Magazine("Tech Monthly", 2022, 5, true);
+            assertEquals("Tech Monthly - 2022", mag.getSummary());
+            assertEquals(5, mag.getLength());
+            assertEquals("Tech Monthly - Issue 5 (2022)", mag.toString());
+        }
+    
+        @Test
+        void testMagazineUpdateMonthly() {
+            Magazine mag = new Magazine("Science Today", 2023, 10, true);
+            mag.updateInfo();
+            assertEquals(11, mag.getLength());
+            assertEquals("Science Today - 2024", mag.getSummary());
+        }
+    
+        @Test
+        void testMagazineUpdateNonMonthly() {
+            Magazine mag = new Magazine("Annual Digest", 2023, 1, false);
+            mag.updateInfo();
+            assertEquals(2, mag.getLength());
+            assertEquals("Annual Digest - 2023", mag.getSummary());
+        }
+    
+        @Test
+        void testPolymorphismWithPublicationArray() {
+            Publication[] items = {
+                new Book("1984", 1949, "George Orwell", 328),
+                new Magazine("Tech Monthly", 2024, 8, true)
+            };
+            assertEquals(328, items[0].getLength());
+            assertEquals(8, items[1].getLength());
+        }
+    
+        @Test
+        void testMultipleBookUpdates() {
+            Book book = new Book("A Tale", 2024, "Author", 90);
+            book.updateInfo();
+            book.updateInfo();
+            assertEquals(110, book.getLength());
+        }
+    
+        @Test
+        void testMultipleMagazineUpdatesMonthly() {
+            Magazine mag = new Magazine("Space Today", 2020, 12, true);
+            mag.updateInfo(); // issue = 13, year = 2021
+            mag.updateInfo(); // issue = 14, year = 2022
+            assertEquals(14, mag.getLength());
+            assertEquals("Space Today - 2022", mag.getSummary());
+        }
+    
+        @Test
+        void testToStringMethods() {
+            Book b = new Book("Winds of Winter", 2024, "GRRM", 500);
+            Magazine m = new Magazine("World News", 2022, 3, false);
+            assertEquals("Winds of Winter by GRRM (500 pages)", b.toString());
+            assertEquals("World News - Issue 3 (2022)", m.toString());
+        }
+    }
+
+    @Nested
+    @TestMethodOrder(MethodOrderer.MethodName.class)
+    public class ChemicalSubstanceTest {
+        Element hydrogen;
+        Element oxygen;
+        Element carbon;
+        Compound water;
+        Compound carbonDioxide;
+    
+        @BeforeEach
+        void setup() {
+            hydrogen = new Element("Hydrogen", "H", 1);
+            oxygen = new Element("Oxygen", "O", 8);
+            carbon = new Element("Carbon", "C", 6);
+    
+            ArrayList<Element> h2oComponents = new ArrayList<>();
+            h2oComponents.add(hydrogen);
+            h2oComponents.add(oxygen);
+            water = new Compound("Water", "H2O", h2oComponents);
+    
+            ArrayList<Element> co2Components = new ArrayList<>();
+            co2Components.add(carbon);
+            co2Components.add(oxygen);
+            carbonDioxide = new Compound("Carbon Dioxide", "CO2", co2Components);
+        }
+    
+        @Test
+        void testElementDescribe() {
+            assertEquals("Hydrogen [H] - Atomic Number: 1", hydrogen.describe());
+        }
+    
+        @Test
+        void testCompoundDescribe() {
+            assertEquals("Water [H2O] - Composed of: H, O", water.describe());
+        }
+    
+        @Test
+        void testElementReactWithCompoundTrue() {
+            assertTrue(hydrogen.reactsWith(water));
+        }
+    
+        @Test
+        void testElementReactWithCompoundFalse() {
+            assertFalse(carbon.reactsWith(water));
+        }
+    
+        @Test
+        void testCompoundReactWithElementTrue() {
+            assertTrue(water.reactsWith(oxygen));
+        }
+    
+        @Test
+        void testCompoundReactWithElementFalse() {
+            assertFalse(water.reactsWith(carbon));
+        }
+    
+        @Test
+        void testToStringOverrideForElement() {
+            assertEquals(hydrogen.describe(), hydrogen.toString());
+        }
+    
+        @Test
+        void testToStringOverrideForCompound() {
+            assertEquals(water.describe(), water.toString());
+        }
+    
+        @Test
+        void testGettersInElement() {
+            assertEquals(8, oxygen.getAtomicNumber());
+            assertEquals("Oxygen", oxygen.getName());
+            assertEquals("O", oxygen.getSymbol());
+        }
+    
+        @Test
+        void testCompoundContainsCorrectElements() {
+            ArrayList<Element> elements = carbonDioxide.getComponents();
+            assertTrue(elements.contains(carbon));
+            assertTrue(elements.contains(oxygen));
+            assertEquals(2, elements.size());
+        }
+    }
+
+    @Nested
+    @TestMethodOrder(MethodOrderer.MethodName.class)
+    public class PetHotelTest {
+
+        private Pet pet1;
+        private Pet pet2;
+        private PetHotel hotel;
+    
+        @BeforeEach
+        void setUp() {
+            // Create Pet objects and a PetHotel object before each test
+            pet1 = new Pet("Buddy", "Cat");
+            pet2 = new Pet("Lucy", "Pterodactyl");
+            hotel = new PetHotel();
+        }
+    
+        // Test Pet class functionality
+    
+        @Test
+        void testPetName() {
+            // Test that the name is correctly initialized and retrieved
+            assertEquals("Buddy", pet1.getName());
+        }
+    
+        @Test
+        void testAssignOwner() {
+            // Test assigning an owner to a pet
+            pet1.assignOwner("John");
+            assertEquals("John", pet1.getOwner());
+        }
+    
+        @Test
+        void testRemoveOwner() {
+            // Test removing an owner from a pet
+            pet1.assignOwner("John");
+            pet1.removeOwner();
+            assertNull(pet1.getOwner());
+        }
+    
+        @Test
+        void testGetOwnerWhenNotAssigned() {
+            // Test that a pet without an owner returns null
+            assertNull(pet2.getOwner());
+        }
+    
+        // Test PetHotel class functionality
+    
+        @Test
+        void testCheckInPet() {
+            // Test checking in a pet
+            hotel.checkIn(pet1);
+            assertTrue(hotel.isGuest(pet1));
+        }
+    
+        @Test
+        void testCheckOutPet() {
+            // Test checking out a pet
+            hotel.checkIn(pet1);
+            hotel.checkOut(pet1);
+            assertFalse(hotel.isGuest(pet1));
+        }
+    
+        @Test
+        void testIsCheckedInBeforeCheckIn() {
+            // Test checking in status before check-in
+            assertFalse(hotel.isGuest(pet2));
+        }
+    
+        @Test
+        void testListCheckedInPets() {
+            // Test listing checked-in pets
+            hotel.checkIn(pet1);
+            hotel.checkIn(pet2);
+            assertEquals("Buddy,Lucy", hotel.listCheckedInPets());
+        }
+    
+        @Test
+        void testCheckInPetTwice() {
+            // Test checking in the same pet twice (should fail)
+            hotel.checkIn(pet1);
+            hotel.checkIn(pet1);  // Should not add the pet a second time
+            assertEquals("Buddy", hotel.listCheckedInPets());
+        }
+    
+        @Test
+        void testCheckOutPetNotCheckedIn() {
+            // Test trying to check out a pet that is not checked in
+            hotel.checkOut(pet1);  // No effect because pet1 was not checked in
+            assertFalse(hotel.isGuest(pet1));
+        }
+    }
+
+    @Nested
+    @TestMethodOrder(MethodOrderer.MethodName.class)
+    public class ExperimentTrackerTest {
+
+        private Experiment exp1;
+        private Experiment exp2;
+        private Experiment exp3;
+        private ExperimentTracker tracker;
+    
+        @BeforeEach
+        void setUp() {
+            // Initialize Experiment objects and ExperimentTracker object before each test
+            exp1 = new Experiment("Experiment1", true);
+            exp2 = new Experiment("Experiment2", false);
+            exp3 = new Experiment("Experiment3", true);
+            tracker = new ExperimentTracker();
+        }
+    
+        // Test Experiment class functionality
+    
+        @Test
+        void testGetName() {
+            // Test that the name of the experiment is correctly retrieved
+            assertEquals("Experiment1", exp1.getName());
+        }
+    
+        @Test
+        void testWasSuccessful() {
+            // Test that the success status of the experiment is correctly returned
+            assertTrue(exp1.wasSuccessful());
+            assertFalse(exp2.wasSuccessful());
+        }
+    
+        @Test
+        void testToString() {
+            // Test that the string representation of the experiment is correct
+            assertEquals("Experiment1 - Success", exp1.toString());
+            assertEquals("Experiment2 - Failure", exp2.toString());
+        }
+    
+        // Test ExperimentTracker class functionality
+    
+        @Test
+        void testAddExperiment() {
+            // Test that experiments are correctly added to the tracker
+            tracker.addExperiment(exp1);
+            tracker.addExperiment(exp2);
+            assertEquals(2, tracker.countSuccessful());
+        }
+    
+        @Test
+        void testCountSuccessfulWithNoExperiments() {
+            // Test that the count of successful experiments is 0 when no experiments are added
+            assertEquals(0, tracker.countSuccessful());
+        }
+    
+        @Test
+        void testCountSuccessfulWithOneSuccessfulExperiment() {
+            // Test that the count of successful experiments is correct when there is one successful experiment
+            tracker.addExperiment(exp1);
+            assertEquals(1, tracker.countSuccessful());
+        }
+    
+        @Test
+        void testCountSuccessfulWithMultipleExperiments() {
+            // Test that the count of successful experiments is correct when there are multiple experiments
+            tracker.addExperiment(exp1);
+            tracker.addExperiment(exp2);
+            tracker.addExperiment(exp3);
+            assertEquals(2, tracker.countSuccessful());
+        }
+    
+        @Test
+        void testCountSuccessfulWithOnlyFailedExperiments() {
+            // Test that the count of successful experiments is 0 when all experiments are failures
+            Experiment failedExp1 = new Experiment("Fail1", false);
+            Experiment failedExp2 = new Experiment("Fail2", false);
+            tracker.addExperiment(failedExp1);
+            tracker.addExperiment(failedExp2);
+            assertEquals(0, tracker.countSuccessful());
+        }
+    
+        @Test
+        void testCountSuccessfulAfterRemovingExperiment() {
+            // Test that count of successful experiments is correct after removing an experiment
+            tracker.addExperiment(exp1);
+            tracker.addExperiment(exp2);
+            tracker.addExperiment(exp3);
+            tracker.addExperiment(new Experiment("Fail4", false));
+            assertEquals(2, tracker.countSuccessful());
+        }
+    }
+
+    @Nested
+    @TestMethodOrder(MethodOrderer.MethodName.class)
+    public class TeamManagerTest {
+
+        private TeamMember member1;
+        private TeamMember member2;
+        private TeamMember member3;
+        private TeamManager manager;
+    
+        @BeforeEach
+        void setUp() {
+            // Initialize TeamMember objects and TeamManager object before each test
+            member1 = new TeamMember("Alice", "Developer");
+            member2 = new TeamMember("Bob", "Designer");
+            member3 = new TeamMember("Charlie", "Manager");
+            manager = new TeamManager();
+        }
+    
+        // Test TeamMember class functionality
+    
+        @Test
+        void testGetName() {
+            // Test that the name of the team member is correctly retrieved
+            assertEquals("Alice", member1.getName());
+        }
+    
+        @Test
+        void testGetRole() {
+            // Test that the role of the team member is correctly retrieved
+            assertEquals("Developer", member1.getRole());
+        }
+    
+        @Test
+        void testToString() {
+            // Test that the string representation of the team member is correct
+            assertEquals("Alice the Developer", member1.toString());
+            assertEquals("Bob the Designer", member2.toString());
+        }
+    
+        // Test TeamManager class functionality
+    
+        @Test
+        void testAddMember() {
+            // Test that a member is correctly added to the team
+            manager.addMember(member1);
+            assertTrue(manager.hasMember(member1));
+        }
+    
+        @Test
+        void testHasMemberWhenMemberExists() {
+            // Test that the manager correctly identifies an existing member in the team
+            manager.addMember(member2);
+            assertTrue(manager.hasMember(member2));
+        }
+    
+        @Test
+        void testHasMemberWhenMemberDoesNotExist() {
+            // Test that the manager correctly identifies when a member is not in the team
+            assertFalse(manager.hasMember(member1));
+        }
+    
+        @Test
+        void testTeamSizeWithNoMembers() {
+            // Test that the team size is 0 when no members have been added
+            assertEquals(0, manager.teamSize());
+        }
+    
+        @Test
+        void testTeamSizeWithOneMember() {
+            // Test that the team size is 1 when only one member has been added
+            manager.addMember(member1);
+            assertEquals(1, manager.teamSize());
+        }
+    
+        @Test
+        void testTeamSizeWithMultipleMembers() {
+            // Test that the team size is correct when multiple members have been added
+            manager.addMember(member1);
+            manager.addMember(member2);
+            manager.addMember(member3);
+            assertEquals(3, manager.teamSize());
+        }
+    
+        @Test
+        void testHasMemberAfterRemoval() {
+            // Test that the team manager correctly identifies the member after removal
+            manager.addMember(member1);
+            manager.addMember(member2);
+            // Assuming no remove method, manually check membership
+            assertTrue(manager.hasMember(member2));
+        }
+    }
+
+
+
 }
