@@ -8,10 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.MethodOrderer;
@@ -692,4 +694,215 @@ public class AppTest
             assertTrue(possessors.contains(user3));
         }
     }
+
+    @TestMethodOrder(MethodOrderer.MethodName.class)
+    public static class ZooTest {
+
+        private Animal lion;
+        private Animal tiger;
+        private Zookeeper alice;
+        private Zookeeper bob;
+        private ZooManager zooManager;
+    
+        @BeforeEach
+        void setUp() {
+            lion = new Animal("Lion");
+            tiger = new Animal("Tiger");
+            alice = new Zookeeper("Alice");
+            bob = new Zookeeper("Bob");
+            zooManager = new ZooManager();
+            
+            zooManager.addZookeeper(alice);
+            zooManager.addZookeeper(bob);
+            zooManager.addAnimal(lion);
+            zooManager.addAnimal(tiger);
+        }
+    
+        @Test
+        void testAnimalHasNoZookeeperInitially() {
+            assertFalse(lion.hasZookeeper(), "Lion should not have a zookeeper initially.");
+            assertFalse(tiger.hasZookeeper(), "Tiger should not have a zookeeper initially.");
+        }
+    
+        @Test
+        void testAssignAnimalToZookeeper() {
+            lion.assignTo(alice);
+            assertTrue(lion.hasZookeeper(), "Lion should have a zookeeper after being assigned.");
+            assertEquals(alice, lion.getZookeeper(), "The zookeeper assigned to the lion should be Alice.");
+        }
+    
+        @Test
+        void testAssignMultipleAnimalsToZookeeper() {
+            lion.assignTo(alice);
+            tiger.assignTo(alice);
+            List<Animal> assignedAnimals = alice.getAssignedAnimals();
+            
+            assertEquals(2, assignedAnimals.size(), "Alice should be assigned 2 animals.");
+            assertTrue(assignedAnimals.contains(lion), "Alice should take care of the lion.");
+            assertTrue(assignedAnimals.contains(tiger), "Alice should take care of the tiger.");
+        }
+    
+        @Test
+        void testReassignAnimalToAnotherZookeeper() {
+            lion.assignTo(alice);
+            lion.assignTo(bob);
+            
+            List<Animal> aliceAnimals = alice.getAssignedAnimals();
+            List<Animal> bobAnimals = bob.getAssignedAnimals();
+            
+            assertTrue(bobAnimals.contains(lion), "Bob should be assigned the lion after reassigning.");
+            assertFalse(aliceAnimals.contains(lion), "Alice should no longer be assigned the lion.");
+        }
+    
+        @Test
+        void testZookeeperCaresForAnimal() {
+            lion.assignTo(alice);
+            assertTrue(alice.caresFor(lion), "Alice should care for the lion.");
+            assertFalse(bob.caresFor(lion), "Bob should not care for the lion.");
+        }
+    
+        @Test
+        void testZooManagerAddZookeeper() {
+            assertEquals(2, zooManager.getIdleZookeepers().size(), "There should be 2 idle zookeepers initially.");
+        }
+    
+        @Test
+        void testZooManagerGetUnassignedAnimals() {
+            List<Animal> unassignedAnimals = zooManager.getUnassignedAnimals();
+            assertEquals(2, unassignedAnimals.size(), "There should be 2 unassigned animals initially.");
+        }
+    
+        @Test
+        void testZooManagerAssignAnimalToZookeeper() {
+            zooManager.assignAnimalToZookeeper(lion, alice);
+            List<Animal> aliceAnimals = alice.getAssignedAnimals();
+            assertTrue(aliceAnimals.contains(lion), "Lion should be assigned to Alice via ZooManager.");
+        }
+    
+        @Test
+        void testZooManagerGetIdleZookeepers() {
+            zooManager.assignAnimalToZookeeper(lion, alice);
+            List<Zookeeper> idleZookeepers = zooManager.getIdleZookeepers();
+            assertEquals(1, idleZookeepers.size(), "There should be 1 idle zookeeper after assigning an animal.");
+            assertTrue(idleZookeepers.contains(bob), "Bob should be the idle zookeeper.");
+        }
+    
+        @Test
+        void testZookeeperToString() {
+            lion.assignTo(alice);
+            tiger.assignTo(bob);
+            
+            String aliceToString = alice.toString();
+            String bobToString = bob.toString();
+            
+            assertEquals("Alice (1 animals)", aliceToString, "Alice's toString should return the correct format.");
+            assertEquals("Bob (1 animals)", bobToString, "Bob's toString should return the correct format.");
+        }
+
+        @Test
+        void testAssignAnimalToNullZookeeper() {
+            assertThrows(NullPointerException.class, () -> {
+                lion.assignTo(null);
+            }, "Assigning an animal to a null zookeeper should throw an exception.");
+        }
+
+        @Test
+        void testAssignNullAnimalToZookeeper() {
+            assertThrows(NullPointerException.class, () -> {
+                alice.takeCareOf(null);
+            }, "Assigning a null animal should throw an exception.");
+        }
+
+        @Test
+        void testUnassignUnassignedAnimal() {
+            assertDoesNotThrow(() -> {
+                lion.assignTo(null);  // Unassigning the lion without reassigning.
+                assertNull(lion.getZookeeper(), "Lion should have no zookeeper after unassignment.");
+            });
+        }
+
+        @Test
+        void testReassignAnimalToSameZookeeper() {
+            lion.assignTo(alice);
+            lion.assignTo(alice); // Reassigning the same animal to the same zookeeper
+        
+            List<Animal> assignedAnimals = alice.getAssignedAnimals();
+            assertEquals(1, assignedAnimals.size(), "Alice should still be assigned only 1 animal.");
+            assertTrue(assignedAnimals.contains(lion), "Alice should take care of the lion.");
+        }
+
+        @Test
+        void testAssignAnimalToZookeeperWhoAlreadyCaresForIt() {
+            lion.assignTo(alice);
+            assertDoesNotThrow(() -> {
+                alice.takeCareOf(lion); // Reassigning the lion to the same zookeeper
+            }, "Assigning the same animal to the same zookeeper should not cause any error.");
+        }
+
+        // Behavioral Tests
+
+        @Test
+        void testToStringForAnimalWithoutZookeeper() {
+            assertEquals("Lion", lion.toString(), "The string representation of an unassigned animal should be its species.");
+        }
+
+        @Test
+        void testToStringForZookeeperWithoutAnimals() {
+            assertEquals("Alice (0 animals)", alice.toString(), "A zookeeper with no animals should display '0 animals'.");
+        }
+
+        @Test
+        void testCaresForUnassignedAnimal() {
+            assertFalse(alice.caresFor(lion), "Alice should not care for the lion since it is not assigned.");
+        }
+
+        @Test
+        void testToStringAfterAnimalsAssigned() {
+            lion.assignTo(alice);
+            tiger.assignTo(alice);
+            assertEquals("Alice (2 animals)", alice.toString(), "Alice should now have 2 animals after assignment.");
+        }
+
+        // Edge Case Testing
+
+        @Test
+        void testAnimalWithEmptySpecies() {
+            Animal emptySpeciesAnimal = new Animal("");
+            assertEquals("", emptySpeciesAnimal.toString(), "Animal with an empty species name should return an empty string.");
+        }
+
+        @Test
+        void testZookeeperWithEmptyName() {
+            Zookeeper emptyNameZookeeper = new Zookeeper("");
+            assertEquals(" (0 animals)", emptyNameZookeeper.toString(), "Zookeeper with an empty name should still display the correct format.");
+        }
+
+        @Test
+        void testAddingAnimalsWithoutZookeepers() {
+            zooManager.addAnimal(new Animal("Giraffe"));
+            zooManager.addAnimal(new Animal("Elephant"));
+            List<Animal> unassignedAnimals = zooManager.getUnassignedAnimals();
+            assertEquals(4, unassignedAnimals.size(), "There should be 4 unassigned animals when no zookeepers are added.");
+        }
+
+        @Test
+        void testAssignAllAnimalsToOneZookeeper() {
+            lion.assignTo(alice);
+            tiger.assignTo(alice);
+            List<Animal> assignedAnimals = alice.getAssignedAnimals();
+            assertEquals(2, assignedAnimals.size(), "Alice should now care for both the lion and the tiger.");
+        }
+
+        @Test
+        void testAddingLargeNumberOfAnimals() {
+            for (int i = 0; i < 1000; i++) {
+                zooManager.addAnimal(new Animal("Animal" + i));
+            }
+            List<Animal> unassignedAnimals = zooManager.getUnassignedAnimals();
+            assertEquals(1000, unassignedAnimals.size(), "There should be 1000 unassigned animals initially.");
+    }
+    }
+
+
+
 }

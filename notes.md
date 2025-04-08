@@ -190,3 +190,63 @@ Create a `Library` class and a `User` class for a library system. The library ca
 - **`Book` class**:
   - `Book(String title)`: Initializes a book with a title.
   - `getTitle()`: Returns the title of the book.
+
+---
+
+## Animal Class
+
+### Methods
+
+- **Animal(String species)**:  
+  Creates a new animal of the given species.
+
+- **assignTo(Zookeeper zookeeper)**:  
+  Assigns the animal to the given zookeeper.  
+  If the animal was previously assigned to someone else, they are unassigned from the previous zookeeper.  
+  Assignment is mutual — the animal knows its zookeeper, and the zookeeper knows which animals they care for.
+
+- **hasZookeeper()**:  
+  Returns `true` if the animal has a zookeeper.
+
+- **getZookeeper()**:  
+  Returns the current zookeeper assigned to this animal, or `null` if none.
+
+- **toString()**:  
+  Returns the species of the animal as a string.
+
+
+### Zookeeper Class
+
+- **Zookeeper(String name)**:  
+  Creates a zookeeper with the given name.
+
+- **takeCareOf(Animal animal)**:  
+  Assigns the animal to this zookeeper.  
+  If the animal was already cared for by someone else, remove it from that zookeeper first.
+
+- **getAssignedAnimals()**:  
+  Returns a list of animals this zookeeper is responsible for.
+
+- **caresFor(Animal animal)**:  
+  Returns `true` if the zookeeper is currently responsible for that animal.
+
+- **toString()**:  
+  Returns the zookeeper's name followed by the number of animals, e.g., "Sam (3 animals)".
+
+
+### ZooManager Class
+
+- **addZookeeper(Zookeeper zookeeper)**:  
+  Adds a zookeeper to the zoo system.
+
+- **addAnimal(Animal animal)**:  
+  Adds an animal to the zoo.
+
+- **assignAnimalToZookeeper(Animal animal, Zookeeper zookeeper)**:  
+  Assigns the animal to the zookeeper.
+
+- **getUnassignedAnimals()**:  
+  Returns a list of animals that currently don’t have a zookeeper.
+
+- **getIdleZookeepers()**:  
+  Returns a list of zookeepers not responsible for any animals.
