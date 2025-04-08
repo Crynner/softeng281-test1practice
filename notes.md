@@ -472,7 +472,7 @@ Represents a single sound in a language.
 - Methods:
   - `getSymbol()`, `getDuration()`, `getIntensity()`, `isVowel()`
   - `isLong()`: Returns true if duration is greater than 250ms.
-  - `amplify(double factor)`: Multiplies intensity by the given factor, capped at `1.0`.
+  - `amplify(double factor)`: Multiplies intensity by the given factor, capped between `0.0` and `1.0`.
 
 #### **VowelDetector**
 Analyzes a list of `Phoneme` objects.
@@ -530,7 +530,7 @@ Methods:
 - `boolean containsPattern(String pattern)`  
   Returns true if the pattern exists in the sequence (case-sensitive).
 - `int countOccurrences(String subsequence)`  
-  Counts how many times a given subsequence appears.
+  Counts how many times a given subsequence appears. Overlapping matches are not counted.
 
 ### 3. Organism
 
@@ -553,7 +553,7 @@ Fields:
 Methods:
 - `void registerOrganism(Organism org)`
 - `ArrayList<String> getOrganismsWithGenePattern(String pattern)`  
-  Returns names of all organisms that have any gene containing that pattern.
+  Returns names of all organisms that have any gene **containing** that pattern.
 - `String generateReport()`  
   Returns a multi-line String summarizing each organism and its gene count in the following format:
   ```md
