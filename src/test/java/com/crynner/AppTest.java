@@ -18,14 +18,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Nested;
 
 
 
 public class AppTest 
 {
+    @Test
+    void TestFix() {
+        assertTrue(true);
+    }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class SteelFabricationManagerTest {
+    class SteelFabricationManagerTest {
 
         SteelFabricationManager manager;
     
@@ -105,8 +111,9 @@ public class AppTest
         }
     }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class BankAccountTest {
+    public class BankAccountTest {
 
         BankAccount account1;
         BankAccount account2;
@@ -186,8 +193,9 @@ public class AppTest
         }
     }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class SpaceFleetTest {
+    public class SpaceFleetTest {
     
         SpaceFleet fleet;
 
@@ -278,8 +286,9 @@ public class AppTest
         }
     }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class CharacterTest {
+    public class CharacterTest {
 
         @Test
         void testWarriorCreation() {
@@ -344,8 +353,9 @@ public class AppTest
         }
     }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class DisasterEventTest {
+    public class DisasterEventTest {
 
         // Test 1: Constructor 1 - Only ID and Name
         @Test
@@ -438,8 +448,9 @@ public class AppTest
         }
     }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class CriminalInvestigationTests {
+    public class CriminalInvestigationTests {
         @AfterEach
         public void reset() {
             CriminalInvestigation.resetTotalCases();
@@ -541,8 +552,9 @@ public class AppTest
         }
     }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class LibrarySystemTest {
+    public class LibrarySystemTest {
 
         private Library library;
         private LibraryBook book1;
@@ -695,8 +707,9 @@ public class AppTest
         }
     }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class ZooTest {
+    public class ZooTest {
 
         private Animal lion;
         private Animal tiger;
@@ -903,8 +916,9 @@ public class AppTest
     }
     }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class PublicationTest {
+    public class PublicationTest {
 
         @Test
         void testBookConstructorFull() {
@@ -988,8 +1002,9 @@ public class AppTest
         }
     }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class ChemicalSubstanceTest {
+    public class ChemicalSubstanceTest {
         Element hydrogen;
         Element oxygen;
         Element carbon;
@@ -1069,8 +1084,9 @@ public class AppTest
         }
     }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class PetHotelTest {
+    public class PetHotelTest {
 
         private Pet pet1;
         private Pet pet2;
@@ -1160,8 +1176,9 @@ public class AppTest
         }
     }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class ExperimentTrackerTest {
+    public class ExperimentTrackerTest {
 
         private Experiment exp1;
         private Experiment exp2;
@@ -1252,8 +1269,9 @@ public class AppTest
         }
     }
 
+    @Nested
     @TestMethodOrder(MethodOrderer.MethodName.class)
-    public static class TeamManagerTest {
+    public class TeamManagerTest {
 
         private TeamMember member1;
         private TeamMember member2;
