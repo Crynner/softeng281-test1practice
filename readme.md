@@ -21,6 +21,7 @@ Within the repo are test questions similar to CodeRunner exercises and the Pract
 ## Notes
 - Each "Question" is separated into its own file - 1 file = 1 question.
 - Each Question has ~10 test cases to qualify a full pass, however most are fairly simple to implement.
+    - Additional fields, imports, constructors or methods may be required, or would facilitate faster completion.
 - The task overview for each question is located in `notes.md`, ordered and generally explain everything, however for a few questions one may need to look at the test cases to get precise formatting correct.
     - Using VSCode, markdown files should have a "preview" in the top right, showing the formatted document rather than plaintext.
 - The maven wrapper like in **Assignment 1** can be used in the same way, however running test cases will be less verbose due to lack of the same CLI as in A1.
