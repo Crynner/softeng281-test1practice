@@ -32,9 +32,7 @@ public class SpaceFleet {
 }
 
 class Spaceship {
-    public Spaceship(String name, String status) {
-
-    }
+    public Spaceship(String name, String status) {}
 
     public String getName() {
         return "";

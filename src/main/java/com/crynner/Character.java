@@ -2,6 +2,10 @@ package com.crynner;
 
 public abstract class Character {
 
+    // filler constructor to prevent compilation errors
+    public Character(){}
+    // delete above constructor once the question is complete
+
     public Character(String name, int level) {
     }
 

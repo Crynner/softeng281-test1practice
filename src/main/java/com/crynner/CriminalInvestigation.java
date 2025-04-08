@@ -22,6 +22,7 @@ public class CriminalInvestigation {
         return 0;
     }
 
+    // do not touch - for test cases
     public static void resetTotalCases() {
         totalCases = 0;
     }

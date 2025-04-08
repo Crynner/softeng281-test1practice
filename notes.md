@@ -447,3 +447,118 @@ Complete the TeamManager class as follows:
 - **addMember(TeamMember member):** Adds a team member to the team.
 - **hasMember(TeamMember member):** Returns true if the team contains the specified member, otherwise false.
 - **teamSize():** Returns the size of the team (the number of members in the team).
+
+---
+
+## 14. Phoneme Analyzer and Vowel Detector
+
+### **Context**  
+You're modeling a **phonetic analyzer** that processes speech sounds (phonemes) and identifies patterns in them. A `Phoneme` represents a unit of sound, while a `VowelDetector` analyzes a collection of phonemes and identifies vowel-heavy sections.
+
+---
+
+### **1. Class Overview**
+
+#### **Phoneme**
+Represents a single sound in a language.
+
+- Fields:
+  - `symbol` (char): The IPA symbol representing the phoneme.
+  - `durationMs` (long): How long the phoneme is pronounced, in milliseconds.
+  - `intensity` (double): A value between `0.0` and `1.0` indicating how loud it is.
+  - `isVowel` (boolean): Whether the sound is a vowel.
+- Constructor:
+  - `Phoneme(char symbol, long durationMs, double intensity, boolean isVowel)`
+- Methods:
+  - `getSymbol()`, `getDuration()`, `getIntensity()`, `isVowel()`
+  - `isLong()`: Returns true if duration is greater than 250ms.
+  - `amplify(double factor)`: Multiplies intensity by the given factor, capped at `1.0`.
+
+#### **VowelDetector**
+Analyzes a list of `Phoneme` objects.
+
+- Constructor:
+  - `VowelDetector()`: Initializes an empty list of phonemes.
+- Methods:
+  - `addPhoneme(Phoneme p)`
+  - `getVowelCount()`: Returns the number of phonemes marked as vowels.
+  - `getAverageIntensity()`: Returns the average intensity of all phonemes (return 0.0 if none).
+  - `getLongestVowel()`: Returns the **symbol** of the longest vowel phoneme. If no vowels exist, return `'-'`.
+  - `removeShortSounds(long minDuration)`: Removes all phonemes shorter than `minDuration` milliseconds.
+  - `toString()`: Returns all phonemes in the form `"Symbol: [symbol], Duration: [duration]ms, Intensity: [intensity]"` (one per line).
+
+---
+
+## 15. DNA Laboratory System
+
+### Task:
+
+Complete the following classes to simulate a DNA analysis lab system:
+
+- `Nucleotide`: Represents a single DNA base (A, T, C, G).
+- `Gene`: Represents a sequence of nucleotides (a DNA strand).
+- `Organism`: Represents a living entity with a name and a list of genes.
+- `DNALab`: Manages multiple organisms and performs cross-organism DNA comparisons.
+
+## Class Specifications
+
+### 1. Nucleotide
+
+Each nucleotide has:
+- A `char base` (must be 'A', 'T', 'C', or 'G')  
+  If an invalid character is given, default the base to 'A'.
+
+Methods:
+- `char getBase()`
+- `String getComplement()`  
+  Returns the complement base: A ↔ T, C ↔ G
+
+### 2. Gene
+
+Fields:
+- A list of `Nucleotide` objects.
+
+Constructors:
+- `Gene(String sequence)`  
+  Parses the string into nucleotides. Invalid characters are ignored.
+
+Methods:
+- `String getSequence()`  
+  Returns the string form (e.g. "ATGCGT").
+- `String getComplementarySequence()`  
+  Returns the complementary sequence in reverse order.
+- `boolean containsPattern(String pattern)`  
+  Returns true if the pattern exists in the sequence (case-sensitive).
+- `int countOccurrences(String subsequence)`  
+  Counts how many times a given subsequence appears.
+
+### 3. Organism
+
+Fields:
+- `String name`
+- List of `Gene` objects
+
+Methods:
+- `void addGene(Gene gene)`
+- `String getFullDNA()`  
+  Concatenates all genes in sequence.
+- `boolean hasMatchingGene(Organism other)`  
+  Returns true if both organisms share a gene with the exact same sequence.
+
+### 4. DNALab
+
+Fields:
+- List of `Organism` objects
+
+Methods:
+- `void registerOrganism(Organism org)`
+- `ArrayList<String> getOrganismsWithGenePattern(String pattern)`  
+  Returns names of all organisms that have any gene containing that pattern.
+- `String generateReport()`  
+  Returns a multi-line String summarizing each organism and its gene count in the following format:
+  ```md
+  Organism: [Name]
+  Gene Count: [count]
+  ```
+
+---

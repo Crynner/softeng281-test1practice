@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 abstract class ChemicalSubstance {
 
+    // filler constructor to prevent compilation errors
+    public ChemicalSubstance() {}
+    // delete above constructor once the question is complete
+
     public ChemicalSubstance(String name, String symbol) {
     }
 
@@ -50,6 +54,7 @@ class Compound extends ChemicalSubstance {
     }
 
     public ArrayList<Element> getComponents() {
+        return new ArrayList<>();
     }
 
     @Override
